@@ -31,6 +31,3 @@ while [ $k -lt ${#basenames[@]} ]; do
     let k=k+1;
 done
 
-rm $testdir/outputs/*.myout
-
-
