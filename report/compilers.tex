@@ -1,0 +1,103 @@
+\documentclass[12pt]{article}
+\usepackage{parskip}
+\usepackage[T1]{fontenc}
+
+\title{A little Compiler}
+\author{Joshua Leger, Fred Kneeland}
+\date{Febuary 9, 2016}
+
+\begin{document}
+    \maketitle
+    \begin{abstract}
+	
+		The goal of this project was to learn the fundamentals of compilation through the implementation of working compiler for the little language.  This project was done through Montana State University as the senior capstone project.  	
+	
+    \end{abstract}
+    \clearpage
+    \tableofcontents
+    \clearpage
+    
+    \section{Introduction}
+		This project was done as part of the CSCI 468 compilers class.  // TODO: add more to this section as the project progresses 
+		    
+    \section{Background}
+    		// TODO: complete this section
+    	
+    \section{Methods and Discussion}
+    
+    			This project was implemented in python and run from the command line.  A file was given to the program as an argument and the compiler would then parse that file.
+    
+    	\subsection{Scanner}
+    			For the Scanner we utilized an open source python lexer by Dabeaz LLC.  We then used some regex statements to determine if an expression was valid and used that to validate the syntax and read in the expressions to be parsed. The following are the regular expressions used.
+
+                First is the string literal:
+
+                \begin{verbatim}
+                    "[^"]*"
+                \end{verbatim}
+
+                This matches a quotation mark followed by 0 or more non quotation mark characters, ending in another quotation mark.
+
+                Next are operators:
+
+                \begin{verbatim}
+                    <=|>=|:=|\+|-|\*|/|=|!=|<|>|\(|\)|;|,
+                \end{verbatim}
+
+                This was simply a large or statement, looking for each possible operator. Escape characters had to be used for +, *, (, and ). The <= and >= also had to come before < and > so it did not interpret <= as the < operator followed by the = operator.
+
+                Float literals are defined as:
+
+                \begin{verbatim}
+                    [0-9]*\.[0-9]+
+                \end{verbatim}
+
+                Floats have 0 or more digits followed a period followed by 1 or more digits.
+
+                Similarly, integer literals are defined as: 
+
+                \begin{verbatim}
+                    [0-9]+
+                \end{verbatim}
+
+                Integers are simply a list of 1 or more digits.
+
+                Keywords and identifiers are defined with the same regular expression:
+
+                \begin{verbatim}
+                    [a-zA-Z][a-zA-Z0-9]*
+                \end{verbatim}
+
+                Identifiers are simply a letter followed by 0 or more letters and numbers. To identify keywords, a check on the string is run for equality to any of the keywords defined in the list named reserved defined at the top of the file.
+
+                Finally, comments are defined as:
+
+                \begin{verbatim}
+                    --.*
+                \end{verbatim}
+
+                This matches a -- followed by the rest of the line. Instead of assigning a token to this, it is simply skipped over.
+
+                Everything else is simply skipped over. This includes all whitespace.
+
+                The order to search for tokens is string literal, float literal, int literal, operator, identifier, and keyword. Float has to be in front of int, but otherwise the order of checking does not matter.
+
+
+
+
+    	\subsection{Parser}
+    		TODO
+
+    	\subsection{Symbol Table}
+    		TODO
+
+    	\subsection{Semantic Routines}
+    		TODO
+
+    	\subsection{Full fledged Compiler}
+    		TODO
+
+    \section{Conclusion and future work}	
+			TODO	    
+    
+ \end{document}
