@@ -1,3 +1,8 @@
 .idea
 __pycache__
 *.myout
+compilers.aux
+compilers.dvi
+compilers.log
+compilers.pdf
+compilers.toc
