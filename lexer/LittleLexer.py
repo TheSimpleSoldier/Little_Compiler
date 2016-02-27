@@ -1,5 +1,6 @@
 import lex
 import sys
+import LittleParser;
 
 #All the reserved words
 reserved = [
@@ -71,7 +72,9 @@ with open(sys.argv[1], "r") as myFile:
     data = myFile.read()
     lexer.input(data)
 
+LittleParser.parser(lexer)
+
 #For each token found, prints it out
-for tok in lexer:
-    print("Token Type: " + tok.type)
-    print("Value: " + str(tok.value))
+# for tok in lexer:
+#    print("Token Type: " + tok.type)
+#    print("Value: " + str(tok.value))
