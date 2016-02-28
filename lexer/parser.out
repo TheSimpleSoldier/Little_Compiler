@@ -1,0 +1,470 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> IDENTIFIER = expression
+Rule 2     statement -> expression
+Rule 3     statement -> KEYWORD expression
+Rule 4     statement -> KEYWORD
+Rule 5     expression -> expression + expression
+Rule 6     expression -> expression - expression
+Rule 7     expression -> expression * expression
+Rule 8     expression -> expression / expression
+Rule 9     expression -> ( expression )
+Rule 10    expression -> FLOATLITERAL
+Rule 11    expression -> INTLITERAL
+Rule 12    expression -> OPERATOR
+Rule 13    expression -> STRINGLITERAL
+Rule 14    expression -> IDENTIFIER
+
+Terminals, with rules where they appear
+
+(                    : 9
+)                    : 9
+*                    : 7
++                    : 5
+-                    : 6
+/                    : 8
+=                    : 1
+FLOATLITERAL         : 10
+IDENTIFIER           : 1 14
+INTLITERAL           : 11
+KEYWORD              : 3 4
+OPERATOR             : 12
+STRINGLITERAL        : 13
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 3 5 5 6 6 7 7 8 8 9
+statement            : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . IDENTIFIER = expression
+    (2) statement -> . expression
+    (3) statement -> . KEYWORD expression
+    (4) statement -> . KEYWORD
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 8
+    KEYWORD         shift and go to state 2
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+
+    expression                     shift and go to state 9
+    statement                      shift and go to state 5
+
+state 1
+
+    (11) expression -> INTLITERAL .
+
+    +               reduce using rule 11 (expression -> INTLITERAL .)
+    -               reduce using rule 11 (expression -> INTLITERAL .)
+    *               reduce using rule 11 (expression -> INTLITERAL .)
+    /               reduce using rule 11 (expression -> INTLITERAL .)
+    $end            reduce using rule 11 (expression -> INTLITERAL .)
+    )               reduce using rule 11 (expression -> INTLITERAL .)
+
+
+state 2
+
+    (3) statement -> KEYWORD . expression
+    (4) statement -> KEYWORD .
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    $end            reduce using rule 4 (statement -> KEYWORD .)
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 11
+
+state 3
+
+    (13) expression -> STRINGLITERAL .
+
+    +               reduce using rule 13 (expression -> STRINGLITERAL .)
+    -               reduce using rule 13 (expression -> STRINGLITERAL .)
+    *               reduce using rule 13 (expression -> STRINGLITERAL .)
+    /               reduce using rule 13 (expression -> STRINGLITERAL .)
+    $end            reduce using rule 13 (expression -> STRINGLITERAL .)
+    )               reduce using rule 13 (expression -> STRINGLITERAL .)
+
+
+state 4
+
+    (10) expression -> FLOATLITERAL .
+
+    +               reduce using rule 10 (expression -> FLOATLITERAL .)
+    -               reduce using rule 10 (expression -> FLOATLITERAL .)
+    *               reduce using rule 10 (expression -> FLOATLITERAL .)
+    /               reduce using rule 10 (expression -> FLOATLITERAL .)
+    $end            reduce using rule 10 (expression -> FLOATLITERAL .)
+    )               reduce using rule 10 (expression -> FLOATLITERAL .)
+
+
+state 5
+
+    (0) S' -> statement .
+
+
+
+state 6
+
+    (9) expression -> ( . expression )
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 12
+
+state 7
+
+    (12) expression -> OPERATOR .
+
+    +               reduce using rule 12 (expression -> OPERATOR .)
+    -               reduce using rule 12 (expression -> OPERATOR .)
+    *               reduce using rule 12 (expression -> OPERATOR .)
+    /               reduce using rule 12 (expression -> OPERATOR .)
+    $end            reduce using rule 12 (expression -> OPERATOR .)
+    )               reduce using rule 12 (expression -> OPERATOR .)
+
+
+state 8
+
+    (1) statement -> IDENTIFIER . = expression
+    (14) expression -> IDENTIFIER .
+
+    =               shift and go to state 13
+    +               reduce using rule 14 (expression -> IDENTIFIER .)
+    -               reduce using rule 14 (expression -> IDENTIFIER .)
+    *               reduce using rule 14 (expression -> IDENTIFIER .)
+    /               reduce using rule 14 (expression -> IDENTIFIER .)
+    $end            reduce using rule 14 (expression -> IDENTIFIER .)
+
+
+state 9
+
+    (2) statement -> expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    $end            reduce using rule 2 (statement -> expression .)
+    +               shift and go to state 15
+    -               shift and go to state 14
+    *               shift and go to state 16
+    /               shift and go to state 17
+
+
+state 10
+
+    (14) expression -> IDENTIFIER .
+
+    +               reduce using rule 14 (expression -> IDENTIFIER .)
+    -               reduce using rule 14 (expression -> IDENTIFIER .)
+    *               reduce using rule 14 (expression -> IDENTIFIER .)
+    /               reduce using rule 14 (expression -> IDENTIFIER .)
+    $end            reduce using rule 14 (expression -> IDENTIFIER .)
+    )               reduce using rule 14 (expression -> IDENTIFIER .)
+
+
+state 11
+
+    (3) statement -> KEYWORD expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    $end            reduce using rule 3 (statement -> KEYWORD expression .)
+    +               shift and go to state 15
+    -               shift and go to state 14
+    *               shift and go to state 16
+    /               shift and go to state 17
+
+
+state 12
+
+    (9) expression -> ( expression . )
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    )               shift and go to state 18
+    +               shift and go to state 15
+    -               shift and go to state 14
+    *               shift and go to state 16
+    /               shift and go to state 17
+
+
+state 13
+
+    (1) statement -> IDENTIFIER = . expression
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 19
+
+state 14
+
+    (6) expression -> expression - . expression
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 20
+
+state 15
+
+    (5) expression -> expression + . expression
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 21
+
+state 16
+
+    (7) expression -> expression * . expression
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 22
+
+state 17
+
+    (8) expression -> expression / . expression
+    (5) expression -> . expression + expression
+    (6) expression -> . expression - expression
+    (7) expression -> . expression * expression
+    (8) expression -> . expression / expression
+    (9) expression -> . ( expression )
+    (10) expression -> . FLOATLITERAL
+    (11) expression -> . INTLITERAL
+    (12) expression -> . OPERATOR
+    (13) expression -> . STRINGLITERAL
+    (14) expression -> . IDENTIFIER
+
+    (               shift and go to state 6
+    FLOATLITERAL    shift and go to state 4
+    INTLITERAL      shift and go to state 1
+    OPERATOR        shift and go to state 7
+    STRINGLITERAL   shift and go to state 3
+    IDENTIFIER      shift and go to state 10
+
+    expression                     shift and go to state 23
+
+state 18
+
+    (9) expression -> ( expression ) .
+
+    +               reduce using rule 9 (expression -> ( expression ) .)
+    -               reduce using rule 9 (expression -> ( expression ) .)
+    *               reduce using rule 9 (expression -> ( expression ) .)
+    /               reduce using rule 9 (expression -> ( expression ) .)
+    $end            reduce using rule 9 (expression -> ( expression ) .)
+    )               reduce using rule 9 (expression -> ( expression ) .)
+
+
+state 19
+
+    (1) statement -> IDENTIFIER = expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    $end            reduce using rule 1 (statement -> IDENTIFIER = expression .)
+    +               shift and go to state 15
+    -               shift and go to state 14
+    *               shift and go to state 16
+    /               shift and go to state 17
+
+
+state 20
+
+    (6) expression -> expression - expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    +               reduce using rule 6 (expression -> expression - expression .)
+    -               reduce using rule 6 (expression -> expression - expression .)
+    $end            reduce using rule 6 (expression -> expression - expression .)
+    )               reduce using rule 6 (expression -> expression - expression .)
+    *               shift and go to state 16
+    /               shift and go to state 17
+
+  ! *               [ reduce using rule 6 (expression -> expression - expression .) ]
+  ! /               [ reduce using rule 6 (expression -> expression - expression .) ]
+  ! +               [ shift and go to state 15 ]
+  ! -               [ shift and go to state 14 ]
+
+
+state 21
+
+    (5) expression -> expression + expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    +               reduce using rule 5 (expression -> expression + expression .)
+    -               reduce using rule 5 (expression -> expression + expression .)
+    $end            reduce using rule 5 (expression -> expression + expression .)
+    )               reduce using rule 5 (expression -> expression + expression .)
+    *               shift and go to state 16
+    /               shift and go to state 17
+
+  ! *               [ reduce using rule 5 (expression -> expression + expression .) ]
+  ! /               [ reduce using rule 5 (expression -> expression + expression .) ]
+  ! +               [ shift and go to state 15 ]
+  ! -               [ shift and go to state 14 ]
+
+
+state 22
+
+    (7) expression -> expression * expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    +               reduce using rule 7 (expression -> expression * expression .)
+    -               reduce using rule 7 (expression -> expression * expression .)
+    *               reduce using rule 7 (expression -> expression * expression .)
+    /               reduce using rule 7 (expression -> expression * expression .)
+    $end            reduce using rule 7 (expression -> expression * expression .)
+    )               reduce using rule 7 (expression -> expression * expression .)
+
+  ! +               [ shift and go to state 15 ]
+  ! -               [ shift and go to state 14 ]
+  ! *               [ shift and go to state 16 ]
+  ! /               [ shift and go to state 17 ]
+
+
+state 23
+
+    (8) expression -> expression / expression .
+    (5) expression -> expression . + expression
+    (6) expression -> expression . - expression
+    (7) expression -> expression . * expression
+    (8) expression -> expression . / expression
+
+    +               reduce using rule 8 (expression -> expression / expression .)
+    -               reduce using rule 8 (expression -> expression / expression .)
+    *               reduce using rule 8 (expression -> expression / expression .)
+    /               reduce using rule 8 (expression -> expression / expression .)
+    $end            reduce using rule 8 (expression -> expression / expression .)
+    )               reduce using rule 8 (expression -> expression / expression .)
+
+  ! +               [ shift and go to state 15 ]
+  ! -               [ shift and go to state 14 ]
+  ! *               [ shift and go to state 16 ]
+  ! /               [ shift and go to state 17 ]
+
