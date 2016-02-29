@@ -82,10 +82,28 @@ def p_statement_assign(p):
     names[p[1]] = p[3]
 
 def p_statement_expr(p):
-    '''statement : expression 
-	         | KEYWORD expression
-		 | KEYWORD'''
+    'statement : expression'
+    print("statement: expression")
+    print(p[0])
     print(p[1])
+
+def p_expression_begin(p):
+    'expression : KEYWORD expression KEYWORD'
+
+    #p[0] = p[2]
+
+    print("p_expression_begin")
+    print(p[1])
+    print(p[2])
+    print(p[3])
+
+
+def p_expression_keyword(p):
+    'expression : KEYWORD'
+
+def p_expression_keyword_identifier(p):
+    'expression : KEYWORD IDENTIFIER'
+    print("p_expression_keyword_identifier")
 
 def p_expression_binop(p):
     '''expression : expression '+' expression

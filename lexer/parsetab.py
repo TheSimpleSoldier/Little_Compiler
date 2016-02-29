@@ -5,9 +5,9 @@ _tabversion = '3.8'
 
 _lr_method = 'LALR'
 
-_lr_signature = '8F8CFEE3921D7E6476F6F523F2CEF79F'
+_lr_signature = '938C7B0F015688C5A2D93366B3972FE3'
     
-_lr_action_items = {'INTLITERAL':([0,2,6,13,14,15,16,17,],[1,1,1,1,1,1,1,1,]),'KEYWORD':([0,],[2,]),')':([1,3,4,7,10,12,18,20,21,22,23,],[-11,-13,-10,-12,-14,18,-9,-6,-5,-7,-8,]),'(':([0,2,6,13,14,15,16,17,],[6,6,6,6,6,6,6,6,]),'+':([1,3,4,7,8,9,10,11,12,18,19,20,21,22,23,],[-11,-13,-10,-12,-14,15,-14,15,15,-9,15,-6,-5,-7,-8,]),'*':([1,3,4,7,8,9,10,11,12,18,19,20,21,22,23,],[-11,-13,-10,-12,-14,16,-14,16,16,-9,16,16,16,-7,-8,]),'-':([1,3,4,7,8,9,10,11,12,18,19,20,21,22,23,],[-11,-13,-10,-12,-14,14,-14,14,14,-9,14,-6,-5,-7,-8,]),'STRINGLITERAL':([0,2,6,13,14,15,16,17,],[3,3,3,3,3,3,3,3,]),'/':([1,3,4,7,8,9,10,11,12,18,19,20,21,22,23,],[-11,-13,-10,-12,-14,17,-14,17,17,-9,17,17,17,-7,-8,]),'FLOATLITERAL':([0,2,6,13,14,15,16,17,],[4,4,4,4,4,4,4,4,]),'OPERATOR':([0,2,6,13,14,15,16,17,],[7,7,7,7,7,7,7,7,]),'IDENTIFIER':([0,2,6,13,14,15,16,17,],[8,10,10,10,10,10,10,10,]),'=':([8,],[13,]),'$end':([1,2,3,4,5,7,8,9,10,11,18,19,20,21,22,23,],[-11,-4,-13,-10,0,-12,-14,-2,-14,-3,-9,-1,-6,-5,-7,-8,]),}
+_lr_action_items = {'INTLITERAL':([0,2,6,14,15,16,17,18,],[1,1,1,1,1,1,1,1,]),'KEYWORD':([0,1,2,3,4,6,7,10,11,12,14,15,16,17,18,19,20,22,23,24,25,],[2,-12,2,-14,-11,2,-13,-5,19,-15,2,2,2,2,2,-3,-10,-7,-6,-8,-9,]),')':([1,2,3,4,7,10,12,13,19,20,22,23,24,25,],[-12,-4,-14,-11,-13,-5,-15,20,-3,-10,-7,-6,-8,-9,]),'(':([0,2,6,14,15,16,17,18,],[6,6,6,6,6,6,6,6,]),'+':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,16,-5,16,-15,16,-3,-10,16,-7,-6,-8,-9,]),'*':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,17,-5,17,-15,17,-3,-10,17,17,17,-8,-9,]),'-':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,15,-5,15,-15,15,-3,-10,15,-7,-6,-8,-9,]),'STRINGLITERAL':([0,2,6,14,15,16,17,18,],[3,3,3,3,3,3,3,3,]),'/':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,18,-5,18,-15,18,-3,-10,18,18,18,-8,-9,]),'FLOATLITERAL':([0,2,6,14,15,16,17,18,],[4,4,4,4,4,4,4,4,]),'OPERATOR':([0,2,6,14,15,16,17,18,],[7,7,7,7,7,7,7,7,]),'IDENTIFIER':([0,2,6,14,15,16,17,18,],[8,10,12,12,12,12,12,12,]),'=':([8,],[14,]),'$end':([1,2,3,4,5,7,8,9,10,12,19,20,21,22,23,24,25,],[-12,-4,-14,-11,0,-13,-15,-2,-5,-15,-3,-10,-1,-7,-6,-8,-9,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,2,6,13,14,15,16,17,],[9,11,12,19,20,21,22,23,]),'statement':([0,],[5,]),}
+_lr_goto_items = {'expression':([0,2,6,14,15,16,17,18,],[9,11,13,21,22,23,24,25,]),'statement':([0,],[5,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -28,16 +28,17 @@ _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
   ('statement -> IDENTIFIER = expression','statement',3,'p_statement_assign','LittleLexer.py',81),
   ('statement -> expression','statement',1,'p_statement_expr','LittleLexer.py',85),
-  ('statement -> KEYWORD expression','statement',2,'p_statement_expr','LittleLexer.py',86),
-  ('statement -> KEYWORD','statement',1,'p_statement_expr','LittleLexer.py',87),
-  ('expression -> expression + expression','expression',3,'p_expression_binop','LittleLexer.py',91),
-  ('expression -> expression - expression','expression',3,'p_expression_binop','LittleLexer.py',92),
-  ('expression -> expression * expression','expression',3,'p_expression_binop','LittleLexer.py',93),
-  ('expression -> expression / expression','expression',3,'p_expression_binop','LittleLexer.py',94),
-  ('expression -> ( expression )','expression',3,'p_expression_group','LittleLexer.py',101),
-  ('expression -> FLOATLITERAL','expression',1,'p_expression_number','LittleLexer.py',105),
-  ('expression -> INTLITERAL','expression',1,'p_expression_number','LittleLexer.py',106),
-  ('expression -> OPERATOR','expression',1,'p_expression_operator','LittleLexer.py',110),
-  ('expression -> STRINGLITERAL','expression',1,'p_expression_string','LittleLexer.py',115),
-  ('expression -> IDENTIFIER','expression',1,'p_expression_name','LittleLexer.py',120),
+  ('expression -> KEYWORD expression KEYWORD','expression',3,'p_expression_begin','LittleLexer.py',89),
+  ('expression -> KEYWORD','expression',1,'p_expression_keyword','LittleLexer.py',100),
+  ('expression -> KEYWORD IDENTIFIER','expression',2,'p_expression_keyword_identifier','LittleLexer.py',103),
+  ('expression -> expression + expression','expression',3,'p_expression_binop','LittleLexer.py',107),
+  ('expression -> expression - expression','expression',3,'p_expression_binop','LittleLexer.py',108),
+  ('expression -> expression * expression','expression',3,'p_expression_binop','LittleLexer.py',109),
+  ('expression -> expression / expression','expression',3,'p_expression_binop','LittleLexer.py',110),
+  ('expression -> ( expression )','expression',3,'p_expression_group','LittleLexer.py',117),
+  ('expression -> FLOATLITERAL','expression',1,'p_expression_number','LittleLexer.py',121),
+  ('expression -> INTLITERAL','expression',1,'p_expression_number','LittleLexer.py',122),
+  ('expression -> OPERATOR','expression',1,'p_expression_operator','LittleLexer.py',126),
+  ('expression -> STRINGLITERAL','expression',1,'p_expression_string','LittleLexer.py',131),
+  ('expression -> IDENTIFIER','expression',1,'p_expression_name','LittleLexer.py',136),
 ]
