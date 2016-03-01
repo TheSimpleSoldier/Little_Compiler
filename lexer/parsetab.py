@@ -5,9 +5,9 @@ _tabversion = '3.8'
 
 _lr_method = 'LALR'
 
-_lr_signature = '938C7B0F015688C5A2D93366B3972FE3'
+_lr_signature = 'BBB656C882C375032AFC74F204EACC55'
     
-_lr_action_items = {'INTLITERAL':([0,2,6,14,15,16,17,18,],[1,1,1,1,1,1,1,1,]),'KEYWORD':([0,1,2,3,4,6,7,10,11,12,14,15,16,17,18,19,20,22,23,24,25,],[2,-12,2,-14,-11,2,-13,-5,19,-15,2,2,2,2,2,-3,-10,-7,-6,-8,-9,]),')':([1,2,3,4,7,10,12,13,19,20,22,23,24,25,],[-12,-4,-14,-11,-13,-5,-15,20,-3,-10,-7,-6,-8,-9,]),'(':([0,2,6,14,15,16,17,18,],[6,6,6,6,6,6,6,6,]),'+':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,16,-5,16,-15,16,-3,-10,16,-7,-6,-8,-9,]),'*':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,17,-5,17,-15,17,-3,-10,17,17,17,-8,-9,]),'-':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,15,-5,15,-15,15,-3,-10,15,-7,-6,-8,-9,]),'STRINGLITERAL':([0,2,6,14,15,16,17,18,],[3,3,3,3,3,3,3,3,]),'/':([1,2,3,4,7,8,9,10,11,12,13,19,20,21,22,23,24,25,],[-12,-4,-14,-11,-13,-15,18,-5,18,-15,18,-3,-10,18,18,18,-8,-9,]),'FLOATLITERAL':([0,2,6,14,15,16,17,18,],[4,4,4,4,4,4,4,4,]),'OPERATOR':([0,2,6,14,15,16,17,18,],[7,7,7,7,7,7,7,7,]),'IDENTIFIER':([0,2,6,14,15,16,17,18,],[8,10,12,12,12,12,12,12,]),'=':([8,],[14,]),'$end':([1,2,3,4,5,7,8,9,10,12,19,20,21,22,23,24,25,],[-12,-4,-14,-11,0,-13,-15,-2,-5,-15,-3,-10,-1,-7,-6,-8,-9,]),}
+_lr_action_items = {'INTLITERAL':([53,71,73,75,77,79,81,83,94,98,99,100,102,103,107,108,109,111,120,124,],[-65,-65,-40,-65,-65,-65,91,-43,-65,-39,-55,-56,-63,-65,-57,-58,-42,-65,-40,-65,]),'RETURN':([10,11,12,21,22,29,37,48,50,55,56,58,59,63,64,68,69,76,84,104,105,112,114,115,116,127,128,132,133,],[-65,-65,-5,-4,-3,-7,-6,-65,53,-30,-26,-32,-29,-31,53,-27,-28,-33,-37,-65,-65,-35,53,53,-36,-64,-65,53,-59,]),'READ':([10,11,12,21,22,29,37,48,50,55,56,58,59,63,64,68,69,76,84,104,105,112,114,115,116,127,128,132,133,],[-65,-65,-5,-4,-3,-7,-6,-65,54,-30,-26,-32,-29,-31,54,-27,-28,-33,-37,-65,-65,-35,54,54,-36,-64,-65,54,-59,]),'VOID':([14,],[26,]),'STRINGLITERAL':([28,],[34,]),'WHILE':([10,11,12,21,22,29,37,48,50,55,56,58,59,63,64,68,69,76,84,104,105,112,114,115,116,127,128,132,133,],[-65,-65,-5,-4,-3,-7,-6,-65,57,-30,-26,-32,-29,-31,57,-27,-28,-33,-37,-65,-65,-35,57,57,-36,-64,-65,57,-59,]),'PROGRAM':([0,],[1,]),'RIGHTPAREN':([20,31,32,35,36,38,40,41,42,43,45,47,49,52,82,85,87,89,90,91,92,93,95,96,97,110,111,113,117,118,119,120,123,125,126,131,134,],[-65,-14,-12,-65,-65,-13,44,-65,-16,-17,-15,-19,-65,-18,-38,101,104,105,106,-53,-41,-45,-44,-52,-54,117,-65,-62,-51,123,-65,-48,-46,-50,-47,-65,-49,]),'MULTIPLY':([91,92,93,95,96,97,117,123,],[-53,107,-45,-44,-52,-54,-51,-46,]),'MINUS':([82,91,92,93,95,96,97,117,123,],[100,-53,-41,-45,-44,-52,-54,-51,-46,]),'DIVIDE':([91,92,93,95,96,97,117,123,],[-53,108,-45,-44,-52,-54,-51,-46,]),'BEGIN':([3,44,],[4,48,]),'SEMICOLON':([19,20,31,32,34,35,38,60,72,82,88,91,92,93,95,96,97,101,106,117,123,],[29,-65,-14,-12,37,-65,-13,76,84,-38,-34,-53,-41,-45,-44,-52,-54,112,116,-51,-46,]),'STRINGEQUALS':([18,61,],[28,77,]),'COMMA':([20,35,41,43,49,82,91,92,93,95,96,97,117,119,123,131,],[30,30,46,-17,46,-38,-53,-41,-45,-44,-52,-54,-51,124,-46,124,]),'PLUS':([82,91,92,93,95,96,97,117,123,],[99,-53,-41,-45,-44,-52,-54,-51,-46,]),'IDENTIFIER':([1,6,7,8,9,10,11,12,21,22,24,25,26,29,30,37,39,48,50,53,55,56,58,59,63,64,68,69,71,73,74,75,76,77,79,80,81,83,84,94,98,99,100,102,103,104,105,107,108,109,111,112,114,115,116,120,124,127,128,132,133,],[3,18,-8,20,-9,-65,-65,-5,-4,-3,-10,33,-11,-7,35,-6,43,-65,61,-65,-30,-26,-32,-29,-31,61,-27,-28,-65,-40,20,-65,-33,-65,-65,20,96,-43,-37,-65,-39,-55,-56,-63,-65,-65,-65,-57,-58,-42,-65,-35,61,61,-36,-40,-65,-64,-65,61,-59,]),'$end':([2,23,],[0,-1,]),'FUNCTION':([4,5,10,11,12,17,21,22,29,37,70,],[-65,14,-65,-65,-5,14,-4,-3,-7,-6,-22,]),'END':([4,5,10,11,12,13,15,16,17,21,22,27,29,37,48,50,51,55,56,58,59,62,63,64,66,68,69,70,76,78,84,112,116,127,133,],[-65,-65,-65,-65,-5,23,-2,-21,-65,-4,-3,-20,-7,-6,-65,-65,70,-30,-26,-32,-29,-25,-31,-65,-23,-27,-28,-22,-33,-24,-37,-35,-36,-64,-59,]),'STRING':([4,10,11,29,37,48,104,105,128,],[6,6,6,-7,-6,6,6,6,6,]),'LEFTPAREN':([33,53,54,57,65,67,71,73,75,77,79,81,83,94,96,98,99,100,102,103,107,108,109,111,120,124,],[36,-65,74,75,79,80,-65,-40,-65,-65,-65,94,-43,-65,111,-39,-55,-56,-63,-65,-57,-58,-42,-65,-40,-65,]),'BOOLEANOPS':([82,86,91,92,93,95,96,97,117,123,],[-38,102,-53,-41,-45,-44,-52,-54,-51,-46,]),'ELSE':([10,11,12,21,22,29,37,55,56,58,59,62,63,64,68,69,76,78,84,105,112,115,116,122,127,133,],[-65,-65,-5,-4,-3,-7,-6,-30,-26,-32,-29,-25,-31,-65,-27,-28,-33,-24,-37,-65,-35,-65,-36,128,-64,-59,]),'WRITE':([10,11,12,21,22,29,37,48,50,55,56,58,59,63,64,68,69,76,84,104,105,112,114,115,116,127,128,132,133,],[-65,-65,-5,-4,-3,-7,-6,-65,67,-30,-26,-32,-29,-31,67,-27,-28,-33,-37,-65,-65,-35,67,67,-36,-64,-65,67,-59,]),'ENDIF':([10,11,12,21,22,29,37,55,56,58,59,62,63,64,68,69,76,78,84,105,112,115,116,122,127,128,129,130,132,133,135,],[-65,-65,-5,-4,-3,-7,-6,-30,-26,-32,-29,-25,-31,-65,-27,-28,-33,-24,-37,-65,-35,-65,-36,-65,-64,-65,133,-61,-65,-59,-60,]),'IF':([10,11,12,21,22,29,37,48,50,55,56,58,59,63,64,68,69,76,84,104,105,112,114,115,116,127,128,132,133,],[-65,-65,-5,-4,-3,-7,-6,-65,65,-30,-26,-32,-29,-31,65,-27,-28,-33,-37,-65,-65,-35,65,65,-36,-64,-65,65,-59,]),'ENDWHILE':([10,11,12,21,22,29,37,55,56,58,59,62,63,64,68,69,76,78,84,104,112,114,116,121,127,133,],[-65,-65,-5,-4,-3,-7,-6,-30,-26,-32,-29,-25,-31,-65,-27,-28,-33,-24,-37,-65,-35,-65,-36,127,-64,-59,]),'INT':([4,10,11,14,29,36,37,46,48,104,105,128,],[7,7,7,7,-7,7,-6,7,7,7,7,7,]),'FLOAT':([4,10,11,14,29,36,37,46,48,104,105,128,],[9,9,9,9,-7,9,-6,9,9,9,9,9,]),'FLOATLITERAL':([53,71,73,75,77,79,81,83,94,98,99,100,102,103,107,108,109,111,120,124,],[-65,-65,-40,-65,-65,-65,97,-43,-65,-39,-55,-56,-63,-65,-57,-58,-42,-65,-40,-65,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,2,6,14,15,16,17,18,],[9,11,13,21,22,23,24,25,]),'statement':([0,],[5,]),}
+_lr_goto_items = {'decl':([4,10,11,48,104,105,128,],[5,21,22,50,114,115,132,]),'var_type':([4,10,11,14,36,46,48,104,105,128,],[8,8,8,24,39,39,8,8,8,8,]),'expr_list':([111,],[118,]),'param_decl_list':([36,],[40,]),'read_stmt':([50,64,114,115,132,],[55,55,55,55,55,]),'primary':([81,],[95,]),'id_tail':([20,35,],[32,38,]),'id_list':([8,74,80,],[19,85,90,]),'return_stmt':([50,64,114,115,132,],[58,58,58,58,58,]),'string_decl':([4,10,11,48,104,105,128,],[11,11,11,11,11,11,11,]),'expr_list_tail':([119,131,],[126,134,]),'postfix_expr':([81,],[92,]),'factor_prefix':([71,],[81,]),'compop':([86,],[103,]),'assign_stmt':([50,64,114,115,132,],[59,59,59,59,59,]),'param_decl_tail':([41,49,],[45,52,]),'assign_expr':([50,64,114,115,132,],[60,60,60,60,60,]),'statement':([0,],[2,]),'factor':([71,],[82,]),'pgm_body':([4,],[13,]),'empty':([4,5,10,11,17,20,35,36,41,48,49,50,53,64,71,75,77,79,94,103,104,105,111,114,115,119,122,124,128,131,132,],[12,16,12,12,16,31,31,42,47,12,47,62,73,62,83,73,73,73,73,73,12,12,120,62,62,125,130,73,12,125,62,]),'write_stmt':([50,64,114,115,132,],[63,63,63,63,63,]),'addop':([82,],[98,]),'func_decl':([5,17,],[15,27,]),'call_expr':([81,],[93,]),'stmt':([50,64,114,115,132,],[64,64,64,64,64,]),'else_part':([122,],[129,]),'any_type':([14,],[25,]),'param_decl':([36,46,],[41,49,]),'func_declaration':([5,17,],[17,17,]),'stmt_list':([50,64,114,115,132,],[66,78,121,122,135,]),'if_stmt':([50,64,114,115,132,],[68,68,68,68,68,]),'base_stmt':([50,64,114,115,132,],[56,56,56,56,56,]),'func_body':([48,],[51,]),'expr':([53,75,77,79,94,103,111,124,],[72,86,88,86,110,113,119,131,]),'expr_prefix':([53,75,77,79,94,103,111,124,],[71,71,71,71,71,71,71,71,]),'var_decl':([4,10,11,48,104,105,128,],[10,10,10,10,10,10,10,]),'while_stmt':([50,64,114,115,132,],[69,69,69,69,69,]),'mulop':([92,],[109,]),'cond':([75,79,],[87,89,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,19 +26,69 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> IDENTIFIER = expression','statement',3,'p_statement_assign','LittleLexer.py',81),
-  ('statement -> expression','statement',1,'p_statement_expr','LittleLexer.py',85),
-  ('expression -> KEYWORD expression KEYWORD','expression',3,'p_expression_begin','LittleLexer.py',89),
-  ('expression -> KEYWORD','expression',1,'p_expression_keyword','LittleLexer.py',100),
-  ('expression -> KEYWORD IDENTIFIER','expression',2,'p_expression_keyword_identifier','LittleLexer.py',103),
-  ('expression -> expression + expression','expression',3,'p_expression_binop','LittleLexer.py',107),
-  ('expression -> expression - expression','expression',3,'p_expression_binop','LittleLexer.py',108),
-  ('expression -> expression * expression','expression',3,'p_expression_binop','LittleLexer.py',109),
-  ('expression -> expression / expression','expression',3,'p_expression_binop','LittleLexer.py',110),
-  ('expression -> ( expression )','expression',3,'p_expression_group','LittleLexer.py',117),
-  ('expression -> FLOATLITERAL','expression',1,'p_expression_number','LittleLexer.py',121),
-  ('expression -> INTLITERAL','expression',1,'p_expression_number','LittleLexer.py',122),
-  ('expression -> OPERATOR','expression',1,'p_expression_operator','LittleLexer.py',126),
-  ('expression -> STRINGLITERAL','expression',1,'p_expression_string','LittleLexer.py',131),
-  ('expression -> IDENTIFIER','expression',1,'p_expression_name','LittleLexer.py',136),
+  ('statement -> PROGRAM IDENTIFIER BEGIN pgm_body END','statement',5,'p_statement_start','LittleLexer.py',124),
+  ('pgm_body -> decl func_decl','pgm_body',2,'p_pgm_body','LittleLexer.py',127),
+  ('decl -> string_decl decl','decl',2,'p_decl','LittleLexer.py',131),
+  ('decl -> var_decl decl','decl',2,'p_decl','LittleLexer.py',132),
+  ('decl -> empty','decl',1,'p_decl','LittleLexer.py',133),
+  ('string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON','string_decl',5,'p_string_decl','LittleLexer.py',136),
+  ('var_decl -> var_type id_list SEMICOLON','var_decl',3,'p_var_decl','LittleLexer.py',140),
+  ('var_type -> INT','var_type',1,'p_var_type','LittleLexer.py',143),
+  ('var_type -> FLOAT','var_type',1,'p_var_type','LittleLexer.py',144),
+  ('any_type -> var_type','any_type',1,'p_any_type','LittleLexer.py',147),
+  ('any_type -> VOID','any_type',1,'p_any_type','LittleLexer.py',148),
+  ('id_list -> IDENTIFIER id_tail','id_list',2,'p_id_list','LittleLexer.py',151),
+  ('id_tail -> COMMA IDENTIFIER id_tail','id_tail',3,'p_id_tail','LittleLexer.py',154),
+  ('id_tail -> empty','id_tail',1,'p_id_tail','LittleLexer.py',155),
+  ('param_decl_list -> param_decl param_decl_tail','param_decl_list',2,'p_param_decl_list','LittleLexer.py',159),
+  ('param_decl_list -> empty','param_decl_list',1,'p_param_decl_list','LittleLexer.py',160),
+  ('param_decl -> var_type IDENTIFIER','param_decl',2,'p_param_decl','LittleLexer.py',163),
+  ('param_decl_tail -> COMMA param_decl param_decl_tail','param_decl_tail',3,'p_param_decl_tail','LittleLexer.py',166),
+  ('param_decl_tail -> empty','param_decl_tail',1,'p_param_decl_tail','LittleLexer.py',167),
+  ('func_decl -> func_declaration func_decl','func_decl',2,'p_func_decl','LittleLexer.py',171),
+  ('func_decl -> empty','func_decl',1,'p_func_decl','LittleLexer.py',172),
+  ('func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END','func_declaration',9,'p_func_declaration','LittleLexer.py',175),
+  ('func_body -> decl stmt_list','func_body',2,'p_func_body','LittleLexer.py',178),
+  ('stmt_list -> stmt stmt_list','stmt_list',2,'p_stmt_list','LittleLexer.py',182),
+  ('stmt_list -> empty','stmt_list',1,'p_stmt_list','LittleLexer.py',183),
+  ('stmt -> base_stmt','stmt',1,'p_stmt','LittleLexer.py',186),
+  ('stmt -> if_stmt','stmt',1,'p_stmt','LittleLexer.py',187),
+  ('stmt -> while_stmt','stmt',1,'p_stmt','LittleLexer.py',188),
+  ('base_stmt -> assign_stmt','base_stmt',1,'p_base_stmt','LittleLexer.py',191),
+  ('base_stmt -> read_stmt','base_stmt',1,'p_base_stmt','LittleLexer.py',192),
+  ('base_stmt -> write_stmt','base_stmt',1,'p_base_stmt','LittleLexer.py',193),
+  ('base_stmt -> return_stmt','base_stmt',1,'p_base_stmt','LittleLexer.py',194),
+  ('assign_stmt -> assign_expr SEMICOLON','assign_stmt',2,'p_assign_stmt','LittleLexer.py',198),
+  ('assign_expr -> IDENTIFIER STRINGEQUALS expr','assign_expr',3,'p_assign_expr','LittleLexer.py',201),
+  ('read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON','read_stmt',5,'p_read_stmt','LittleLexer.py',204),
+  ('write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON','write_stmt',5,'p_write_stmt','LittleLexer.py',207),
+  ('return_stmt -> RETURN expr SEMICOLON','return_stmt',3,'p_return_stmt','LittleLexer.py',210),
+  ('expr -> expr_prefix factor','expr',2,'p_expr','LittleLexer.py',214),
+  ('expr_prefix -> expr_prefix factor addop','expr_prefix',3,'p_expr_prefix','LittleLexer.py',217),
+  ('expr_prefix -> empty','expr_prefix',1,'p_expr_prefix','LittleLexer.py',218),
+  ('factor -> factor_prefix postfix_expr','factor',2,'p_factor','LittleLexer.py',221),
+  ('factor_prefix -> factor_prefix postfix_expr mulop','factor_prefix',3,'p_factor_prefix','LittleLexer.py',224),
+  ('factor_prefix -> empty','factor_prefix',1,'p_factor_prefix','LittleLexer.py',225),
+  ('postfix_expr -> primary','postfix_expr',1,'p_postfix_expr','LittleLexer.py',228),
+  ('postfix_expr -> call_expr','postfix_expr',1,'p_postfix_expr','LittleLexer.py',229),
+  ('call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN','call_expr',4,'p_call_expr','LittleLexer.py',232),
+  ('expr_list -> expr expr_list_tail','expr_list',2,'p_expr_list','LittleLexer.py',235),
+  ('expr_list -> empty','expr_list',1,'p_expr_list','LittleLexer.py',236),
+  ('expr_list_tail -> COMMA expr expr_list_tail','expr_list_tail',3,'p_expr_list_tail','LittleLexer.py',239),
+  ('expr_list_tail -> empty','expr_list_tail',1,'p_expr_list_tail','LittleLexer.py',240),
+  ('primary -> LEFTPAREN expr RIGHTPAREN','primary',3,'p_primary','LittleLexer.py',243),
+  ('primary -> IDENTIFIER','primary',1,'p_primary','LittleLexer.py',244),
+  ('primary -> INTLITERAL','primary',1,'p_primary','LittleLexer.py',245),
+  ('primary -> FLOATLITERAL','primary',1,'p_primary','LittleLexer.py',246),
+  ('addop -> PLUS','addop',1,'p_addop','LittleLexer.py',249),
+  ('addop -> MINUS','addop',1,'p_addop','LittleLexer.py',250),
+  ('mulop -> MULTIPLY','mulop',1,'p_mulop','LittleLexer.py',253),
+  ('mulop -> DIVIDE','mulop',1,'p_mulop','LittleLexer.py',254),
+  ('if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF','if_stmt',8,'p_if_stmt','LittleLexer.py',258),
+  ('else_part -> ELSE decl stmt_list','else_part',3,'p_else_part','LittleLexer.py',261),
+  ('else_part -> empty','else_part',1,'p_else_part','LittleLexer.py',262),
+  ('cond -> expr compop expr','cond',3,'p_cond','LittleLexer.py',265),
+  ('compop -> BOOLEANOPS','compop',1,'p_compop','LittleLexer.py',268),
+  ('while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE','while_stmt',7,'p_while_stmt','LittleLexer.py',272),
+  ('empty -> <empty>','empty',0,'p_empty','LittleLexer.py',275),
 ]

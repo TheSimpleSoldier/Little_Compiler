@@ -1,1 +1,1945 @@
 Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    KEYWORD
+    ASSIGNMENT
+    OPERATOR
+    BREAK
+    CONTINUE
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> PROGRAM IDENTIFIER BEGIN pgm_body END
+Rule 2     pgm_body -> decl func_decl
+Rule 3     decl -> string_decl decl
+Rule 4     decl -> var_decl decl
+Rule 5     decl -> empty
+Rule 6     string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+Rule 7     var_decl -> var_type id_list SEMICOLON
+Rule 8     var_type -> INT
+Rule 9     var_type -> FLOAT
+Rule 10    any_type -> var_type
+Rule 11    any_type -> VOID
+Rule 12    id_list -> IDENTIFIER id_tail
+Rule 13    id_tail -> COMMA IDENTIFIER id_tail
+Rule 14    id_tail -> empty
+Rule 15    param_decl_list -> param_decl param_decl_tail
+Rule 16    param_decl_list -> empty
+Rule 17    param_decl -> var_type IDENTIFIER
+Rule 18    param_decl_tail -> COMMA param_decl param_decl_tail
+Rule 19    param_decl_tail -> empty
+Rule 20    func_decl -> func_declaration func_decl
+Rule 21    func_decl -> empty
+Rule 22    func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END
+Rule 23    func_body -> decl stmt_list
+Rule 24    stmt_list -> stmt stmt_list
+Rule 25    stmt_list -> empty
+Rule 26    stmt -> base_stmt
+Rule 27    stmt -> if_stmt
+Rule 28    stmt -> while_stmt
+Rule 29    base_stmt -> assign_stmt
+Rule 30    base_stmt -> read_stmt
+Rule 31    base_stmt -> write_stmt
+Rule 32    base_stmt -> return_stmt
+Rule 33    assign_stmt -> assign_expr SEMICOLON
+Rule 34    assign_expr -> IDENTIFIER STRINGEQUALS expr
+Rule 35    read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON
+Rule 36    write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON
+Rule 37    return_stmt -> RETURN expr SEMICOLON
+Rule 38    expr -> expr_prefix factor
+Rule 39    expr_prefix -> expr_prefix factor addop
+Rule 40    expr_prefix -> empty
+Rule 41    factor -> factor_prefix postfix_expr
+Rule 42    factor_prefix -> factor_prefix postfix_expr mulop
+Rule 43    factor_prefix -> empty
+Rule 44    postfix_expr -> primary
+Rule 45    postfix_expr -> call_expr
+Rule 46    call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN
+Rule 47    expr_list -> expr expr_list_tail
+Rule 48    expr_list -> empty
+Rule 49    expr_list_tail -> COMMA expr expr_list_tail
+Rule 50    expr_list_tail -> empty
+Rule 51    primary -> LEFTPAREN expr RIGHTPAREN
+Rule 52    primary -> IDENTIFIER
+Rule 53    primary -> INTLITERAL
+Rule 54    primary -> FLOATLITERAL
+Rule 55    addop -> PLUS
+Rule 56    addop -> MINUS
+Rule 57    mulop -> MULTIPLY
+Rule 58    mulop -> DIVIDE
+Rule 59    if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+Rule 60    else_part -> ELSE decl stmt_list
+Rule 61    else_part -> empty
+Rule 62    cond -> expr compop expr
+Rule 63    compop -> BOOLEANOPS
+Rule 64    while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+Rule 65    empty -> <empty>
+
+Terminals, with rules where they appear
+
+ASSIGNMENT           : 
+BEGIN                : 1 22
+BOOLEANOPS           : 63
+BREAK                : 
+COMMA                : 13 18 49
+CONTINUE             : 
+DIVIDE               : 58
+ELSE                 : 60
+END                  : 1 22
+ENDIF                : 59
+ENDWHILE             : 64
+FLOAT                : 9
+FLOATLITERAL         : 54
+FUNCTION             : 22
+IDENTIFIER           : 1 6 12 13 17 22 34 46 52
+IF                   : 59
+INT                  : 8
+INTLITERAL           : 53
+KEYWORD              : 
+LEFTPAREN            : 22 35 36 46 51 59 64
+MINUS                : 56
+MULTIPLY             : 57
+OPERATOR             : 
+PLUS                 : 55
+PROGRAM              : 1
+READ                 : 35
+RETURN               : 37
+RIGHTPAREN           : 22 35 36 46 51 59 64
+SEMICOLON            : 6 7 33 35 36 37
+STRING               : 6
+STRINGEQUALS         : 6 34
+STRINGLITERAL        : 6
+VOID                 : 11
+WHILE                : 64
+WRITE                : 36
+error                : 
+
+Nonterminals, with rules where they appear
+
+addop                : 39
+any_type             : 22
+assign_expr          : 33
+assign_stmt          : 29
+base_stmt            : 26
+call_expr            : 45
+compop               : 62
+cond                 : 59 64
+decl                 : 2 3 4 23 59 60 64
+else_part            : 59
+empty                : 5 14 16 19 21 25 40 43 48 50 61
+expr                 : 34 37 47 49 51 62 62
+expr_list            : 46
+expr_list_tail       : 47 49
+expr_prefix          : 38 39
+factor               : 38 39
+factor_prefix        : 41 42
+func_body            : 22
+func_decl            : 2 20
+func_declaration     : 20
+id_list              : 7 35 36
+id_tail              : 12 13
+if_stmt              : 27
+mulop                : 42
+param_decl           : 15 18
+param_decl_list      : 22
+param_decl_tail      : 15 18
+pgm_body             : 1
+postfix_expr         : 41 42
+primary              : 44
+read_stmt            : 30
+return_stmt          : 32
+statement            : 0
+stmt                 : 24
+stmt_list            : 23 24 59 60 64
+string_decl          : 3
+var_decl             : 4
+var_type             : 7 10 17
+while_stmt           : 28
+write_stmt           : 31
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . PROGRAM IDENTIFIER BEGIN pgm_body END
+
+    PROGRAM         shift and go to state 1
+
+    statement                      shift and go to state 2
+
+state 1
+
+    (1) statement -> PROGRAM . IDENTIFIER BEGIN pgm_body END
+
+    IDENTIFIER      shift and go to state 3
+
+
+state 2
+
+    (0) S' -> statement .
+
+
+
+state 3
+
+    (1) statement -> PROGRAM IDENTIFIER . BEGIN pgm_body END
+
+    BEGIN           shift and go to state 4
+
+
+state 4
+
+    (1) statement -> PROGRAM IDENTIFIER BEGIN . pgm_body END
+    (2) pgm_body -> . decl func_decl
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    FUNCTION        reduce using rule 65 (empty -> .)
+    END             reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 5
+    var_type                       shift and go to state 8
+    var_decl                       shift and go to state 10
+    string_decl                    shift and go to state 11
+    empty                          shift and go to state 12
+    pgm_body                       shift and go to state 13
+
+state 5
+
+    (2) pgm_body -> decl . func_decl
+    (20) func_decl -> . func_declaration func_decl
+    (21) func_decl -> . empty
+    (22) func_declaration -> . FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END
+    (65) empty -> .
+
+    FUNCTION        shift and go to state 14
+    END             reduce using rule 65 (empty -> .)
+
+    func_decl                      shift and go to state 15
+    empty                          shift and go to state 16
+    func_declaration               shift and go to state 17
+
+state 6
+
+    (6) string_decl -> STRING . IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+
+    IDENTIFIER      shift and go to state 18
+
+
+state 7
+
+    (8) var_type -> INT .
+
+    IDENTIFIER      reduce using rule 8 (var_type -> INT .)
+
+
+state 8
+
+    (7) var_decl -> var_type . id_list SEMICOLON
+    (12) id_list -> . IDENTIFIER id_tail
+
+    IDENTIFIER      shift and go to state 20
+
+    id_list                        shift and go to state 19
+
+state 9
+
+    (9) var_type -> FLOAT .
+
+    IDENTIFIER      reduce using rule 9 (var_type -> FLOAT .)
+
+
+state 10
+
+    (4) decl -> var_decl . decl
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    FUNCTION        reduce using rule 65 (empty -> .)
+    END             reduce using rule 65 (empty -> .)
+    IF              reduce using rule 65 (empty -> .)
+    WHILE           reduce using rule 65 (empty -> .)
+    READ            reduce using rule 65 (empty -> .)
+    WRITE           reduce using rule 65 (empty -> .)
+    RETURN          reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    ENDWHILE        reduce using rule 65 (empty -> .)
+    ELSE            reduce using rule 65 (empty -> .)
+    ENDIF           reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 21
+    var_type                       shift and go to state 8
+    var_decl                       shift and go to state 10
+    string_decl                    shift and go to state 11
+    empty                          shift and go to state 12
+
+state 11
+
+    (3) decl -> string_decl . decl
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    FUNCTION        reduce using rule 65 (empty -> .)
+    END             reduce using rule 65 (empty -> .)
+    IF              reduce using rule 65 (empty -> .)
+    WHILE           reduce using rule 65 (empty -> .)
+    READ            reduce using rule 65 (empty -> .)
+    WRITE           reduce using rule 65 (empty -> .)
+    RETURN          reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    ENDWHILE        reduce using rule 65 (empty -> .)
+    ELSE            reduce using rule 65 (empty -> .)
+    ENDIF           reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 22
+    var_type                       shift and go to state 8
+    var_decl                       shift and go to state 10
+    string_decl                    shift and go to state 11
+    empty                          shift and go to state 12
+
+state 12
+
+    (5) decl -> empty .
+
+    FUNCTION        reduce using rule 5 (decl -> empty .)
+    END             reduce using rule 5 (decl -> empty .)
+    IF              reduce using rule 5 (decl -> empty .)
+    WHILE           reduce using rule 5 (decl -> empty .)
+    READ            reduce using rule 5 (decl -> empty .)
+    WRITE           reduce using rule 5 (decl -> empty .)
+    RETURN          reduce using rule 5 (decl -> empty .)
+    IDENTIFIER      reduce using rule 5 (decl -> empty .)
+    ENDWHILE        reduce using rule 5 (decl -> empty .)
+    ELSE            reduce using rule 5 (decl -> empty .)
+    ENDIF           reduce using rule 5 (decl -> empty .)
+
+
+state 13
+
+    (1) statement -> PROGRAM IDENTIFIER BEGIN pgm_body . END
+
+    END             shift and go to state 23
+
+
+state 14
+
+    (22) func_declaration -> FUNCTION . any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END
+    (10) any_type -> . var_type
+    (11) any_type -> . VOID
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    VOID            shift and go to state 26
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    any_type                       shift and go to state 25
+    var_type                       shift and go to state 24
+
+state 15
+
+    (2) pgm_body -> decl func_decl .
+
+    END             reduce using rule 2 (pgm_body -> decl func_decl .)
+
+
+state 16
+
+    (21) func_decl -> empty .
+
+    END             reduce using rule 21 (func_decl -> empty .)
+
+
+state 17
+
+    (20) func_decl -> func_declaration . func_decl
+    (20) func_decl -> . func_declaration func_decl
+    (21) func_decl -> . empty
+    (22) func_declaration -> . FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END
+    (65) empty -> .
+
+    FUNCTION        shift and go to state 14
+    END             reduce using rule 65 (empty -> .)
+
+    func_decl                      shift and go to state 27
+    empty                          shift and go to state 16
+    func_declaration               shift and go to state 17
+
+state 18
+
+    (6) string_decl -> STRING IDENTIFIER . STRINGEQUALS STRINGLITERAL SEMICOLON
+
+    STRINGEQUALS    shift and go to state 28
+
+
+state 19
+
+    (7) var_decl -> var_type id_list . SEMICOLON
+
+    SEMICOLON       shift and go to state 29
+
+
+state 20
+
+    (12) id_list -> IDENTIFIER . id_tail
+    (13) id_tail -> . COMMA IDENTIFIER id_tail
+    (14) id_tail -> . empty
+    (65) empty -> .
+
+    COMMA           shift and go to state 30
+    SEMICOLON       reduce using rule 65 (empty -> .)
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+
+    empty                          shift and go to state 31
+    id_tail                        shift and go to state 32
+
+state 21
+
+    (4) decl -> var_decl decl .
+
+    FUNCTION        reduce using rule 4 (decl -> var_decl decl .)
+    END             reduce using rule 4 (decl -> var_decl decl .)
+    IF              reduce using rule 4 (decl -> var_decl decl .)
+    WHILE           reduce using rule 4 (decl -> var_decl decl .)
+    READ            reduce using rule 4 (decl -> var_decl decl .)
+    WRITE           reduce using rule 4 (decl -> var_decl decl .)
+    RETURN          reduce using rule 4 (decl -> var_decl decl .)
+    IDENTIFIER      reduce using rule 4 (decl -> var_decl decl .)
+    ENDWHILE        reduce using rule 4 (decl -> var_decl decl .)
+    ELSE            reduce using rule 4 (decl -> var_decl decl .)
+    ENDIF           reduce using rule 4 (decl -> var_decl decl .)
+
+
+state 22
+
+    (3) decl -> string_decl decl .
+
+    FUNCTION        reduce using rule 3 (decl -> string_decl decl .)
+    END             reduce using rule 3 (decl -> string_decl decl .)
+    IF              reduce using rule 3 (decl -> string_decl decl .)
+    WHILE           reduce using rule 3 (decl -> string_decl decl .)
+    READ            reduce using rule 3 (decl -> string_decl decl .)
+    WRITE           reduce using rule 3 (decl -> string_decl decl .)
+    RETURN          reduce using rule 3 (decl -> string_decl decl .)
+    IDENTIFIER      reduce using rule 3 (decl -> string_decl decl .)
+    ENDWHILE        reduce using rule 3 (decl -> string_decl decl .)
+    ELSE            reduce using rule 3 (decl -> string_decl decl .)
+    ENDIF           reduce using rule 3 (decl -> string_decl decl .)
+
+
+state 23
+
+    (1) statement -> PROGRAM IDENTIFIER BEGIN pgm_body END .
+
+    $end            reduce using rule 1 (statement -> PROGRAM IDENTIFIER BEGIN pgm_body END .)
+
+
+state 24
+
+    (10) any_type -> var_type .
+
+    IDENTIFIER      reduce using rule 10 (any_type -> var_type .)
+
+
+state 25
+
+    (22) func_declaration -> FUNCTION any_type . IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END
+
+    IDENTIFIER      shift and go to state 33
+
+
+state 26
+
+    (11) any_type -> VOID .
+
+    IDENTIFIER      reduce using rule 11 (any_type -> VOID .)
+
+
+state 27
+
+    (20) func_decl -> func_declaration func_decl .
+
+    END             reduce using rule 20 (func_decl -> func_declaration func_decl .)
+
+
+state 28
+
+    (6) string_decl -> STRING IDENTIFIER STRINGEQUALS . STRINGLITERAL SEMICOLON
+
+    STRINGLITERAL   shift and go to state 34
+
+
+state 29
+
+    (7) var_decl -> var_type id_list SEMICOLON .
+
+    STRING          reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    INT             reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    FLOAT           reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    IF              reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    WHILE           reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    READ            reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    WRITE           reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    RETURN          reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    IDENTIFIER      reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    END             reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    FUNCTION        reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    ENDWHILE        reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    ELSE            reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+    ENDIF           reduce using rule 7 (var_decl -> var_type id_list SEMICOLON .)
+
+
+state 30
+
+    (13) id_tail -> COMMA . IDENTIFIER id_tail
+
+    IDENTIFIER      shift and go to state 35
+
+
+state 31
+
+    (14) id_tail -> empty .
+
+    SEMICOLON       reduce using rule 14 (id_tail -> empty .)
+    RIGHTPAREN      reduce using rule 14 (id_tail -> empty .)
+
+
+state 32
+
+    (12) id_list -> IDENTIFIER id_tail .
+
+    SEMICOLON       reduce using rule 12 (id_list -> IDENTIFIER id_tail .)
+    RIGHTPAREN      reduce using rule 12 (id_list -> IDENTIFIER id_tail .)
+
+
+state 33
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER . LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END
+
+    LEFTPAREN       shift and go to state 36
+
+
+state 34
+
+    (6) string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL . SEMICOLON
+
+    SEMICOLON       shift and go to state 37
+
+
+state 35
+
+    (13) id_tail -> COMMA IDENTIFIER . id_tail
+    (13) id_tail -> . COMMA IDENTIFIER id_tail
+    (14) id_tail -> . empty
+    (65) empty -> .
+
+    COMMA           shift and go to state 30
+    SEMICOLON       reduce using rule 65 (empty -> .)
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+
+    empty                          shift and go to state 31
+    id_tail                        shift and go to state 38
+
+state 36
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN . param_decl_list RIGHTPAREN BEGIN func_body END
+    (15) param_decl_list -> . param_decl param_decl_tail
+    (16) param_decl_list -> . empty
+    (17) param_decl -> . var_type IDENTIFIER
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    var_type                       shift and go to state 39
+    param_decl_list                shift and go to state 40
+    param_decl                     shift and go to state 41
+    empty                          shift and go to state 42
+
+state 37
+
+    (6) string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .
+
+    STRING          reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    INT             reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    FLOAT           reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    IF              reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    WHILE           reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    READ            reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    WRITE           reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    RETURN          reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    IDENTIFIER      reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    ELSE            reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    ENDIF           reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    ENDWHILE        reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    END             reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+    FUNCTION        reduce using rule 6 (string_decl -> STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON .)
+
+
+state 38
+
+    (13) id_tail -> COMMA IDENTIFIER id_tail .
+
+    SEMICOLON       reduce using rule 13 (id_tail -> COMMA IDENTIFIER id_tail .)
+    RIGHTPAREN      reduce using rule 13 (id_tail -> COMMA IDENTIFIER id_tail .)
+
+
+state 39
+
+    (17) param_decl -> var_type . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 43
+
+
+state 40
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list . RIGHTPAREN BEGIN func_body END
+
+    RIGHTPAREN      shift and go to state 44
+
+
+state 41
+
+    (15) param_decl_list -> param_decl . param_decl_tail
+    (18) param_decl_tail -> . COMMA param_decl param_decl_tail
+    (19) param_decl_tail -> . empty
+    (65) empty -> .
+
+    COMMA           shift and go to state 46
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+
+    param_decl_tail                shift and go to state 45
+    empty                          shift and go to state 47
+
+state 42
+
+    (16) param_decl_list -> empty .
+
+    RIGHTPAREN      reduce using rule 16 (param_decl_list -> empty .)
+
+
+state 43
+
+    (17) param_decl -> var_type IDENTIFIER .
+
+    COMMA           reduce using rule 17 (param_decl -> var_type IDENTIFIER .)
+    RIGHTPAREN      reduce using rule 17 (param_decl -> var_type IDENTIFIER .)
+
+
+state 44
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN . BEGIN func_body END
+
+    BEGIN           shift and go to state 48
+
+
+state 45
+
+    (15) param_decl_list -> param_decl param_decl_tail .
+
+    RIGHTPAREN      reduce using rule 15 (param_decl_list -> param_decl param_decl_tail .)
+
+
+state 46
+
+    (18) param_decl_tail -> COMMA . param_decl param_decl_tail
+    (17) param_decl -> . var_type IDENTIFIER
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    param_decl                     shift and go to state 49
+    var_type                       shift and go to state 39
+
+state 47
+
+    (19) param_decl_tail -> empty .
+
+    RIGHTPAREN      reduce using rule 19 (param_decl_tail -> empty .)
+
+
+state 48
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN . func_body END
+    (23) func_body -> . decl stmt_list
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    IF              reduce using rule 65 (empty -> .)
+    WHILE           reduce using rule 65 (empty -> .)
+    READ            reduce using rule 65 (empty -> .)
+    WRITE           reduce using rule 65 (empty -> .)
+    RETURN          reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    END             reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 50
+    var_type                       shift and go to state 8
+    func_body                      shift and go to state 51
+    var_decl                       shift and go to state 10
+    empty                          shift and go to state 12
+    string_decl                    shift and go to state 11
+
+state 49
+
+    (18) param_decl_tail -> COMMA param_decl . param_decl_tail
+    (18) param_decl_tail -> . COMMA param_decl param_decl_tail
+    (19) param_decl_tail -> . empty
+    (65) empty -> .
+
+    COMMA           shift and go to state 46
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+
+    param_decl_tail                shift and go to state 52
+    empty                          shift and go to state 47
+
+state 50
+
+    (23) func_body -> decl . stmt_list
+    (24) stmt_list -> . stmt stmt_list
+    (25) stmt_list -> . empty
+    (26) stmt -> . base_stmt
+    (27) stmt -> . if_stmt
+    (28) stmt -> . while_stmt
+    (65) empty -> .
+    (29) base_stmt -> . assign_stmt
+    (30) base_stmt -> . read_stmt
+    (31) base_stmt -> . write_stmt
+    (32) base_stmt -> . return_stmt
+    (59) if_stmt -> . IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+    (64) while_stmt -> . WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+    (33) assign_stmt -> . assign_expr SEMICOLON
+    (35) read_stmt -> . READ LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (36) write_stmt -> . WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (37) return_stmt -> . RETURN expr SEMICOLON
+    (34) assign_expr -> . IDENTIFIER STRINGEQUALS expr
+
+    END             reduce using rule 65 (empty -> .)
+    IF              shift and go to state 65
+    WHILE           shift and go to state 57
+    READ            shift and go to state 54
+    WRITE           shift and go to state 67
+    RETURN          shift and go to state 53
+    IDENTIFIER      shift and go to state 61
+
+    stmt_list                      shift and go to state 66
+    if_stmt                        shift and go to state 68
+    assign_expr                    shift and go to state 60
+    read_stmt                      shift and go to state 55
+    stmt                           shift and go to state 64
+    assign_stmt                    shift and go to state 59
+    base_stmt                      shift and go to state 56
+    while_stmt                     shift and go to state 69
+    return_stmt                    shift and go to state 58
+    write_stmt                     shift and go to state 63
+    empty                          shift and go to state 62
+
+state 51
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body . END
+
+    END             shift and go to state 70
+
+
+state 52
+
+    (18) param_decl_tail -> COMMA param_decl param_decl_tail .
+
+    RIGHTPAREN      reduce using rule 18 (param_decl_tail -> COMMA param_decl param_decl_tail .)
+
+
+state 53
+
+    (37) return_stmt -> RETURN . expr SEMICOLON
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr                           shift and go to state 72
+    empty                          shift and go to state 73
+    expr_prefix                    shift and go to state 71
+
+state 54
+
+    (35) read_stmt -> READ . LEFTPAREN id_list RIGHTPAREN SEMICOLON
+
+    LEFTPAREN       shift and go to state 74
+
+
+state 55
+
+    (30) base_stmt -> read_stmt .
+
+    IF              reduce using rule 30 (base_stmt -> read_stmt .)
+    WHILE           reduce using rule 30 (base_stmt -> read_stmt .)
+    READ            reduce using rule 30 (base_stmt -> read_stmt .)
+    WRITE           reduce using rule 30 (base_stmt -> read_stmt .)
+    RETURN          reduce using rule 30 (base_stmt -> read_stmt .)
+    IDENTIFIER      reduce using rule 30 (base_stmt -> read_stmt .)
+    ELSE            reduce using rule 30 (base_stmt -> read_stmt .)
+    ENDIF           reduce using rule 30 (base_stmt -> read_stmt .)
+    END             reduce using rule 30 (base_stmt -> read_stmt .)
+    ENDWHILE        reduce using rule 30 (base_stmt -> read_stmt .)
+
+
+state 56
+
+    (26) stmt -> base_stmt .
+
+    IF              reduce using rule 26 (stmt -> base_stmt .)
+    WHILE           reduce using rule 26 (stmt -> base_stmt .)
+    READ            reduce using rule 26 (stmt -> base_stmt .)
+    WRITE           reduce using rule 26 (stmt -> base_stmt .)
+    RETURN          reduce using rule 26 (stmt -> base_stmt .)
+    IDENTIFIER      reduce using rule 26 (stmt -> base_stmt .)
+    ENDWHILE        reduce using rule 26 (stmt -> base_stmt .)
+    END             reduce using rule 26 (stmt -> base_stmt .)
+    ELSE            reduce using rule 26 (stmt -> base_stmt .)
+    ENDIF           reduce using rule 26 (stmt -> base_stmt .)
+
+
+state 57
+
+    (64) while_stmt -> WHILE . LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+
+    LEFTPAREN       shift and go to state 75
+
+
+state 58
+
+    (32) base_stmt -> return_stmt .
+
+    IF              reduce using rule 32 (base_stmt -> return_stmt .)
+    WHILE           reduce using rule 32 (base_stmt -> return_stmt .)
+    READ            reduce using rule 32 (base_stmt -> return_stmt .)
+    WRITE           reduce using rule 32 (base_stmt -> return_stmt .)
+    RETURN          reduce using rule 32 (base_stmt -> return_stmt .)
+    IDENTIFIER      reduce using rule 32 (base_stmt -> return_stmt .)
+    ELSE            reduce using rule 32 (base_stmt -> return_stmt .)
+    ENDIF           reduce using rule 32 (base_stmt -> return_stmt .)
+    END             reduce using rule 32 (base_stmt -> return_stmt .)
+    ENDWHILE        reduce using rule 32 (base_stmt -> return_stmt .)
+
+
+state 59
+
+    (29) base_stmt -> assign_stmt .
+
+    IF              reduce using rule 29 (base_stmt -> assign_stmt .)
+    WHILE           reduce using rule 29 (base_stmt -> assign_stmt .)
+    READ            reduce using rule 29 (base_stmt -> assign_stmt .)
+    WRITE           reduce using rule 29 (base_stmt -> assign_stmt .)
+    RETURN          reduce using rule 29 (base_stmt -> assign_stmt .)
+    IDENTIFIER      reduce using rule 29 (base_stmt -> assign_stmt .)
+    ELSE            reduce using rule 29 (base_stmt -> assign_stmt .)
+    ENDIF           reduce using rule 29 (base_stmt -> assign_stmt .)
+    END             reduce using rule 29 (base_stmt -> assign_stmt .)
+    ENDWHILE        reduce using rule 29 (base_stmt -> assign_stmt .)
+
+
+state 60
+
+    (33) assign_stmt -> assign_expr . SEMICOLON
+
+    SEMICOLON       shift and go to state 76
+
+
+state 61
+
+    (34) assign_expr -> IDENTIFIER . STRINGEQUALS expr
+
+    STRINGEQUALS    shift and go to state 77
+
+
+state 62
+
+    (25) stmt_list -> empty .
+
+    ELSE            reduce using rule 25 (stmt_list -> empty .)
+    ENDIF           reduce using rule 25 (stmt_list -> empty .)
+    END             reduce using rule 25 (stmt_list -> empty .)
+    ENDWHILE        reduce using rule 25 (stmt_list -> empty .)
+
+
+state 63
+
+    (31) base_stmt -> write_stmt .
+
+    IF              reduce using rule 31 (base_stmt -> write_stmt .)
+    WHILE           reduce using rule 31 (base_stmt -> write_stmt .)
+    READ            reduce using rule 31 (base_stmt -> write_stmt .)
+    WRITE           reduce using rule 31 (base_stmt -> write_stmt .)
+    RETURN          reduce using rule 31 (base_stmt -> write_stmt .)
+    IDENTIFIER      reduce using rule 31 (base_stmt -> write_stmt .)
+    ELSE            reduce using rule 31 (base_stmt -> write_stmt .)
+    ENDIF           reduce using rule 31 (base_stmt -> write_stmt .)
+    END             reduce using rule 31 (base_stmt -> write_stmt .)
+    ENDWHILE        reduce using rule 31 (base_stmt -> write_stmt .)
+
+
+state 64
+
+    (24) stmt_list -> stmt . stmt_list
+    (24) stmt_list -> . stmt stmt_list
+    (25) stmt_list -> . empty
+    (26) stmt -> . base_stmt
+    (27) stmt -> . if_stmt
+    (28) stmt -> . while_stmt
+    (65) empty -> .
+    (29) base_stmt -> . assign_stmt
+    (30) base_stmt -> . read_stmt
+    (31) base_stmt -> . write_stmt
+    (32) base_stmt -> . return_stmt
+    (59) if_stmt -> . IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+    (64) while_stmt -> . WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+    (33) assign_stmt -> . assign_expr SEMICOLON
+    (35) read_stmt -> . READ LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (36) write_stmt -> . WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (37) return_stmt -> . RETURN expr SEMICOLON
+    (34) assign_expr -> . IDENTIFIER STRINGEQUALS expr
+
+    END             reduce using rule 65 (empty -> .)
+    ENDWHILE        reduce using rule 65 (empty -> .)
+    ELSE            reduce using rule 65 (empty -> .)
+    ENDIF           reduce using rule 65 (empty -> .)
+    IF              shift and go to state 65
+    WHILE           shift and go to state 57
+    READ            shift and go to state 54
+    WRITE           shift and go to state 67
+    RETURN          shift and go to state 53
+    IDENTIFIER      shift and go to state 61
+
+    stmt_list                      shift and go to state 78
+    write_stmt                     shift and go to state 63
+    if_stmt                        shift and go to state 68
+    assign_expr                    shift and go to state 60
+    read_stmt                      shift and go to state 55
+    stmt                           shift and go to state 64
+    assign_stmt                    shift and go to state 59
+    base_stmt                      shift and go to state 56
+    while_stmt                     shift and go to state 69
+    return_stmt                    shift and go to state 58
+    empty                          shift and go to state 62
+
+state 65
+
+    (59) if_stmt -> IF . LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+
+    LEFTPAREN       shift and go to state 79
+
+
+state 66
+
+    (23) func_body -> decl stmt_list .
+
+    END             reduce using rule 23 (func_body -> decl stmt_list .)
+
+
+state 67
+
+    (36) write_stmt -> WRITE . LEFTPAREN id_list RIGHTPAREN SEMICOLON
+
+    LEFTPAREN       shift and go to state 80
+
+
+state 68
+
+    (27) stmt -> if_stmt .
+
+    IF              reduce using rule 27 (stmt -> if_stmt .)
+    WHILE           reduce using rule 27 (stmt -> if_stmt .)
+    READ            reduce using rule 27 (stmt -> if_stmt .)
+    WRITE           reduce using rule 27 (stmt -> if_stmt .)
+    RETURN          reduce using rule 27 (stmt -> if_stmt .)
+    IDENTIFIER      reduce using rule 27 (stmt -> if_stmt .)
+    ENDWHILE        reduce using rule 27 (stmt -> if_stmt .)
+    END             reduce using rule 27 (stmt -> if_stmt .)
+    ELSE            reduce using rule 27 (stmt -> if_stmt .)
+    ENDIF           reduce using rule 27 (stmt -> if_stmt .)
+
+
+state 69
+
+    (28) stmt -> while_stmt .
+
+    IF              reduce using rule 28 (stmt -> while_stmt .)
+    WHILE           reduce using rule 28 (stmt -> while_stmt .)
+    READ            reduce using rule 28 (stmt -> while_stmt .)
+    WRITE           reduce using rule 28 (stmt -> while_stmt .)
+    RETURN          reduce using rule 28 (stmt -> while_stmt .)
+    IDENTIFIER      reduce using rule 28 (stmt -> while_stmt .)
+    ENDWHILE        reduce using rule 28 (stmt -> while_stmt .)
+    END             reduce using rule 28 (stmt -> while_stmt .)
+    ELSE            reduce using rule 28 (stmt -> while_stmt .)
+    ENDIF           reduce using rule 28 (stmt -> while_stmt .)
+
+
+state 70
+
+    (22) func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END .
+
+    FUNCTION        reduce using rule 22 (func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END .)
+    END             reduce using rule 22 (func_declaration -> FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END .)
+
+
+state 71
+
+    (38) expr -> expr_prefix . factor
+    (39) expr_prefix -> expr_prefix . factor addop
+    (41) factor -> . factor_prefix postfix_expr
+    (42) factor_prefix -> . factor_prefix postfix_expr mulop
+    (43) factor_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    factor_prefix                  shift and go to state 81
+    factor                         shift and go to state 82
+    empty                          shift and go to state 83
+
+state 72
+
+    (37) return_stmt -> RETURN expr . SEMICOLON
+
+    SEMICOLON       shift and go to state 84
+
+
+state 73
+
+    (40) expr_prefix -> empty .
+
+    LEFTPAREN       reduce using rule 40 (expr_prefix -> empty .)
+    IDENTIFIER      reduce using rule 40 (expr_prefix -> empty .)
+    INTLITERAL      reduce using rule 40 (expr_prefix -> empty .)
+    FLOATLITERAL    reduce using rule 40 (expr_prefix -> empty .)
+
+
+state 74
+
+    (35) read_stmt -> READ LEFTPAREN . id_list RIGHTPAREN SEMICOLON
+    (12) id_list -> . IDENTIFIER id_tail
+
+    IDENTIFIER      shift and go to state 20
+
+    id_list                        shift and go to state 85
+
+state 75
+
+    (64) while_stmt -> WHILE LEFTPAREN . cond RIGHTPAREN decl stmt_list ENDWHILE
+    (62) cond -> . expr compop expr
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr_prefix                    shift and go to state 71
+    expr                           shift and go to state 86
+    cond                           shift and go to state 87
+    empty                          shift and go to state 73
+
+state 76
+
+    (33) assign_stmt -> assign_expr SEMICOLON .
+
+    IF              reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    WHILE           reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    READ            reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    WRITE           reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    RETURN          reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    IDENTIFIER      reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    END             reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    ENDIF           reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    ELSE            reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+    ENDWHILE        reduce using rule 33 (assign_stmt -> assign_expr SEMICOLON .)
+
+
+state 77
+
+    (34) assign_expr -> IDENTIFIER STRINGEQUALS . expr
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr                           shift and go to state 88
+    empty                          shift and go to state 73
+    expr_prefix                    shift and go to state 71
+
+state 78
+
+    (24) stmt_list -> stmt stmt_list .
+
+    ELSE            reduce using rule 24 (stmt_list -> stmt stmt_list .)
+    ENDIF           reduce using rule 24 (stmt_list -> stmt stmt_list .)
+    END             reduce using rule 24 (stmt_list -> stmt stmt_list .)
+    ENDWHILE        reduce using rule 24 (stmt_list -> stmt stmt_list .)
+
+
+state 79
+
+    (59) if_stmt -> IF LEFTPAREN . cond RIGHTPAREN decl stmt_list else_part ENDIF
+    (62) cond -> . expr compop expr
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr_prefix                    shift and go to state 71
+    expr                           shift and go to state 86
+    cond                           shift and go to state 89
+    empty                          shift and go to state 73
+
+state 80
+
+    (36) write_stmt -> WRITE LEFTPAREN . id_list RIGHTPAREN SEMICOLON
+    (12) id_list -> . IDENTIFIER id_tail
+
+    IDENTIFIER      shift and go to state 20
+
+    id_list                        shift and go to state 90
+
+state 81
+
+    (41) factor -> factor_prefix . postfix_expr
+    (42) factor_prefix -> factor_prefix . postfix_expr mulop
+    (44) postfix_expr -> . primary
+    (45) postfix_expr -> . call_expr
+    (51) primary -> . LEFTPAREN expr RIGHTPAREN
+    (52) primary -> . IDENTIFIER
+    (53) primary -> . INTLITERAL
+    (54) primary -> . FLOATLITERAL
+    (46) call_expr -> . IDENTIFIER LEFTPAREN expr_list RIGHTPAREN
+
+    LEFTPAREN       shift and go to state 94
+    IDENTIFIER      shift and go to state 96
+    INTLITERAL      shift and go to state 91
+    FLOATLITERAL    shift and go to state 97
+
+    postfix_expr                   shift and go to state 92
+    call_expr                      shift and go to state 93
+    primary                        shift and go to state 95
+
+state 82
+
+    (38) expr -> expr_prefix factor .
+    (39) expr_prefix -> expr_prefix factor . addop
+    (55) addop -> . PLUS
+    (56) addop -> . MINUS
+
+    RIGHTPAREN      reduce using rule 38 (expr -> expr_prefix factor .)
+    COMMA           reduce using rule 38 (expr -> expr_prefix factor .)
+    BOOLEANOPS      reduce using rule 38 (expr -> expr_prefix factor .)
+    SEMICOLON       reduce using rule 38 (expr -> expr_prefix factor .)
+    PLUS            shift and go to state 99
+    MINUS           shift and go to state 100
+
+    addop                          shift and go to state 98
+
+state 83
+
+    (43) factor_prefix -> empty .
+
+    LEFTPAREN       reduce using rule 43 (factor_prefix -> empty .)
+    IDENTIFIER      reduce using rule 43 (factor_prefix -> empty .)
+    INTLITERAL      reduce using rule 43 (factor_prefix -> empty .)
+    FLOATLITERAL    reduce using rule 43 (factor_prefix -> empty .)
+
+
+state 84
+
+    (37) return_stmt -> RETURN expr SEMICOLON .
+
+    IF              reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    WHILE           reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    READ            reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    WRITE           reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    RETURN          reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    IDENTIFIER      reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    END             reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    ELSE            reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    ENDIF           reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+    ENDWHILE        reduce using rule 37 (return_stmt -> RETURN expr SEMICOLON .)
+
+
+state 85
+
+    (35) read_stmt -> READ LEFTPAREN id_list . RIGHTPAREN SEMICOLON
+
+    RIGHTPAREN      shift and go to state 101
+
+
+state 86
+
+    (62) cond -> expr . compop expr
+    (63) compop -> . BOOLEANOPS
+
+    BOOLEANOPS      shift and go to state 102
+
+    compop                         shift and go to state 103
+
+state 87
+
+    (64) while_stmt -> WHILE LEFTPAREN cond . RIGHTPAREN decl stmt_list ENDWHILE
+
+    RIGHTPAREN      shift and go to state 104
+
+
+state 88
+
+    (34) assign_expr -> IDENTIFIER STRINGEQUALS expr .
+
+    SEMICOLON       reduce using rule 34 (assign_expr -> IDENTIFIER STRINGEQUALS expr .)
+
+
+state 89
+
+    (59) if_stmt -> IF LEFTPAREN cond . RIGHTPAREN decl stmt_list else_part ENDIF
+
+    RIGHTPAREN      shift and go to state 105
+
+
+state 90
+
+    (36) write_stmt -> WRITE LEFTPAREN id_list . RIGHTPAREN SEMICOLON
+
+    RIGHTPAREN      shift and go to state 106
+
+
+state 91
+
+    (53) primary -> INTLITERAL .
+
+    MULTIPLY        reduce using rule 53 (primary -> INTLITERAL .)
+    DIVIDE          reduce using rule 53 (primary -> INTLITERAL .)
+    PLUS            reduce using rule 53 (primary -> INTLITERAL .)
+    MINUS           reduce using rule 53 (primary -> INTLITERAL .)
+    SEMICOLON       reduce using rule 53 (primary -> INTLITERAL .)
+    BOOLEANOPS      reduce using rule 53 (primary -> INTLITERAL .)
+    RIGHTPAREN      reduce using rule 53 (primary -> INTLITERAL .)
+    COMMA           reduce using rule 53 (primary -> INTLITERAL .)
+
+
+state 92
+
+    (41) factor -> factor_prefix postfix_expr .
+    (42) factor_prefix -> factor_prefix postfix_expr . mulop
+    (57) mulop -> . MULTIPLY
+    (58) mulop -> . DIVIDE
+
+    PLUS            reduce using rule 41 (factor -> factor_prefix postfix_expr .)
+    MINUS           reduce using rule 41 (factor -> factor_prefix postfix_expr .)
+    SEMICOLON       reduce using rule 41 (factor -> factor_prefix postfix_expr .)
+    BOOLEANOPS      reduce using rule 41 (factor -> factor_prefix postfix_expr .)
+    RIGHTPAREN      reduce using rule 41 (factor -> factor_prefix postfix_expr .)
+    COMMA           reduce using rule 41 (factor -> factor_prefix postfix_expr .)
+    MULTIPLY        shift and go to state 107
+    DIVIDE          shift and go to state 108
+
+    mulop                          shift and go to state 109
+
+state 93
+
+    (45) postfix_expr -> call_expr .
+
+    MULTIPLY        reduce using rule 45 (postfix_expr -> call_expr .)
+    DIVIDE          reduce using rule 45 (postfix_expr -> call_expr .)
+    PLUS            reduce using rule 45 (postfix_expr -> call_expr .)
+    MINUS           reduce using rule 45 (postfix_expr -> call_expr .)
+    SEMICOLON       reduce using rule 45 (postfix_expr -> call_expr .)
+    BOOLEANOPS      reduce using rule 45 (postfix_expr -> call_expr .)
+    RIGHTPAREN      reduce using rule 45 (postfix_expr -> call_expr .)
+    COMMA           reduce using rule 45 (postfix_expr -> call_expr .)
+
+
+state 94
+
+    (51) primary -> LEFTPAREN . expr RIGHTPAREN
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr                           shift and go to state 110
+    empty                          shift and go to state 73
+    expr_prefix                    shift and go to state 71
+
+state 95
+
+    (44) postfix_expr -> primary .
+
+    MULTIPLY        reduce using rule 44 (postfix_expr -> primary .)
+    DIVIDE          reduce using rule 44 (postfix_expr -> primary .)
+    PLUS            reduce using rule 44 (postfix_expr -> primary .)
+    MINUS           reduce using rule 44 (postfix_expr -> primary .)
+    SEMICOLON       reduce using rule 44 (postfix_expr -> primary .)
+    BOOLEANOPS      reduce using rule 44 (postfix_expr -> primary .)
+    RIGHTPAREN      reduce using rule 44 (postfix_expr -> primary .)
+    COMMA           reduce using rule 44 (postfix_expr -> primary .)
+
+
+state 96
+
+    (52) primary -> IDENTIFIER .
+    (46) call_expr -> IDENTIFIER . LEFTPAREN expr_list RIGHTPAREN
+
+    MULTIPLY        reduce using rule 52 (primary -> IDENTIFIER .)
+    DIVIDE          reduce using rule 52 (primary -> IDENTIFIER .)
+    PLUS            reduce using rule 52 (primary -> IDENTIFIER .)
+    MINUS           reduce using rule 52 (primary -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 52 (primary -> IDENTIFIER .)
+    BOOLEANOPS      reduce using rule 52 (primary -> IDENTIFIER .)
+    RIGHTPAREN      reduce using rule 52 (primary -> IDENTIFIER .)
+    COMMA           reduce using rule 52 (primary -> IDENTIFIER .)
+    LEFTPAREN       shift and go to state 111
+
+
+state 97
+
+    (54) primary -> FLOATLITERAL .
+
+    MULTIPLY        reduce using rule 54 (primary -> FLOATLITERAL .)
+    DIVIDE          reduce using rule 54 (primary -> FLOATLITERAL .)
+    PLUS            reduce using rule 54 (primary -> FLOATLITERAL .)
+    MINUS           reduce using rule 54 (primary -> FLOATLITERAL .)
+    SEMICOLON       reduce using rule 54 (primary -> FLOATLITERAL .)
+    BOOLEANOPS      reduce using rule 54 (primary -> FLOATLITERAL .)
+    RIGHTPAREN      reduce using rule 54 (primary -> FLOATLITERAL .)
+    COMMA           reduce using rule 54 (primary -> FLOATLITERAL .)
+
+
+state 98
+
+    (39) expr_prefix -> expr_prefix factor addop .
+
+    LEFTPAREN       reduce using rule 39 (expr_prefix -> expr_prefix factor addop .)
+    IDENTIFIER      reduce using rule 39 (expr_prefix -> expr_prefix factor addop .)
+    INTLITERAL      reduce using rule 39 (expr_prefix -> expr_prefix factor addop .)
+    FLOATLITERAL    reduce using rule 39 (expr_prefix -> expr_prefix factor addop .)
+
+
+state 99
+
+    (55) addop -> PLUS .
+
+    LEFTPAREN       reduce using rule 55 (addop -> PLUS .)
+    IDENTIFIER      reduce using rule 55 (addop -> PLUS .)
+    INTLITERAL      reduce using rule 55 (addop -> PLUS .)
+    FLOATLITERAL    reduce using rule 55 (addop -> PLUS .)
+
+
+state 100
+
+    (56) addop -> MINUS .
+
+    LEFTPAREN       reduce using rule 56 (addop -> MINUS .)
+    IDENTIFIER      reduce using rule 56 (addop -> MINUS .)
+    INTLITERAL      reduce using rule 56 (addop -> MINUS .)
+    FLOATLITERAL    reduce using rule 56 (addop -> MINUS .)
+
+
+state 101
+
+    (35) read_stmt -> READ LEFTPAREN id_list RIGHTPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 112
+
+
+state 102
+
+    (63) compop -> BOOLEANOPS .
+
+    LEFTPAREN       reduce using rule 63 (compop -> BOOLEANOPS .)
+    IDENTIFIER      reduce using rule 63 (compop -> BOOLEANOPS .)
+    INTLITERAL      reduce using rule 63 (compop -> BOOLEANOPS .)
+    FLOATLITERAL    reduce using rule 63 (compop -> BOOLEANOPS .)
+
+
+state 103
+
+    (62) cond -> expr compop . expr
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr_prefix                    shift and go to state 71
+    expr                           shift and go to state 113
+    empty                          shift and go to state 73
+
+state 104
+
+    (64) while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN . decl stmt_list ENDWHILE
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    IF              reduce using rule 65 (empty -> .)
+    WHILE           reduce using rule 65 (empty -> .)
+    READ            reduce using rule 65 (empty -> .)
+    WRITE           reduce using rule 65 (empty -> .)
+    RETURN          reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    ENDWHILE        reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 114
+    var_type                       shift and go to state 8
+    var_decl                       shift and go to state 10
+    string_decl                    shift and go to state 11
+    empty                          shift and go to state 12
+
+state 105
+
+    (59) if_stmt -> IF LEFTPAREN cond RIGHTPAREN . decl stmt_list else_part ENDIF
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    IF              reduce using rule 65 (empty -> .)
+    WHILE           reduce using rule 65 (empty -> .)
+    READ            reduce using rule 65 (empty -> .)
+    WRITE           reduce using rule 65 (empty -> .)
+    RETURN          reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    ELSE            reduce using rule 65 (empty -> .)
+    ENDIF           reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 115
+    var_type                       shift and go to state 8
+    var_decl                       shift and go to state 10
+    string_decl                    shift and go to state 11
+    empty                          shift and go to state 12
+
+state 106
+
+    (36) write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 116
+
+
+state 107
+
+    (57) mulop -> MULTIPLY .
+
+    LEFTPAREN       reduce using rule 57 (mulop -> MULTIPLY .)
+    IDENTIFIER      reduce using rule 57 (mulop -> MULTIPLY .)
+    INTLITERAL      reduce using rule 57 (mulop -> MULTIPLY .)
+    FLOATLITERAL    reduce using rule 57 (mulop -> MULTIPLY .)
+
+
+state 108
+
+    (58) mulop -> DIVIDE .
+
+    LEFTPAREN       reduce using rule 58 (mulop -> DIVIDE .)
+    IDENTIFIER      reduce using rule 58 (mulop -> DIVIDE .)
+    INTLITERAL      reduce using rule 58 (mulop -> DIVIDE .)
+    FLOATLITERAL    reduce using rule 58 (mulop -> DIVIDE .)
+
+
+state 109
+
+    (42) factor_prefix -> factor_prefix postfix_expr mulop .
+
+    LEFTPAREN       reduce using rule 42 (factor_prefix -> factor_prefix postfix_expr mulop .)
+    IDENTIFIER      reduce using rule 42 (factor_prefix -> factor_prefix postfix_expr mulop .)
+    INTLITERAL      reduce using rule 42 (factor_prefix -> factor_prefix postfix_expr mulop .)
+    FLOATLITERAL    reduce using rule 42 (factor_prefix -> factor_prefix postfix_expr mulop .)
+
+
+state 110
+
+    (51) primary -> LEFTPAREN expr . RIGHTPAREN
+
+    RIGHTPAREN      shift and go to state 117
+
+
+state 111
+
+    (46) call_expr -> IDENTIFIER LEFTPAREN . expr_list RIGHTPAREN
+    (47) expr_list -> . expr expr_list_tail
+    (48) expr_list -> . empty
+    (38) expr -> . expr_prefix factor
+    (65) empty -> .
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr_prefix                    shift and go to state 71
+    expr_list                      shift and go to state 118
+    expr                           shift and go to state 119
+    empty                          shift and go to state 120
+
+state 112
+
+    (35) read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .
+
+    IF              reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    WHILE           reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    READ            reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    WRITE           reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    RETURN          reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    IDENTIFIER      reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    ENDWHILE        reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    END             reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    ELSE            reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    ENDIF           reduce using rule 35 (read_stmt -> READ LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+
+
+state 113
+
+    (62) cond -> expr compop expr .
+
+    RIGHTPAREN      reduce using rule 62 (cond -> expr compop expr .)
+
+
+state 114
+
+    (64) while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl . stmt_list ENDWHILE
+    (24) stmt_list -> . stmt stmt_list
+    (25) stmt_list -> . empty
+    (26) stmt -> . base_stmt
+    (27) stmt -> . if_stmt
+    (28) stmt -> . while_stmt
+    (65) empty -> .
+    (29) base_stmt -> . assign_stmt
+    (30) base_stmt -> . read_stmt
+    (31) base_stmt -> . write_stmt
+    (32) base_stmt -> . return_stmt
+    (59) if_stmt -> . IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+    (64) while_stmt -> . WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+    (33) assign_stmt -> . assign_expr SEMICOLON
+    (35) read_stmt -> . READ LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (36) write_stmt -> . WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (37) return_stmt -> . RETURN expr SEMICOLON
+    (34) assign_expr -> . IDENTIFIER STRINGEQUALS expr
+
+    ENDWHILE        reduce using rule 65 (empty -> .)
+    IF              shift and go to state 65
+    WHILE           shift and go to state 57
+    READ            shift and go to state 54
+    WRITE           shift and go to state 67
+    RETURN          shift and go to state 53
+    IDENTIFIER      shift and go to state 61
+
+    stmt_list                      shift and go to state 121
+    if_stmt                        shift and go to state 68
+    assign_expr                    shift and go to state 60
+    read_stmt                      shift and go to state 55
+    stmt                           shift and go to state 64
+    assign_stmt                    shift and go to state 59
+    base_stmt                      shift and go to state 56
+    while_stmt                     shift and go to state 69
+    return_stmt                    shift and go to state 58
+    write_stmt                     shift and go to state 63
+    empty                          shift and go to state 62
+
+state 115
+
+    (59) if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl . stmt_list else_part ENDIF
+    (24) stmt_list -> . stmt stmt_list
+    (25) stmt_list -> . empty
+    (26) stmt -> . base_stmt
+    (27) stmt -> . if_stmt
+    (28) stmt -> . while_stmt
+    (65) empty -> .
+    (29) base_stmt -> . assign_stmt
+    (30) base_stmt -> . read_stmt
+    (31) base_stmt -> . write_stmt
+    (32) base_stmt -> . return_stmt
+    (59) if_stmt -> . IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+    (64) while_stmt -> . WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+    (33) assign_stmt -> . assign_expr SEMICOLON
+    (35) read_stmt -> . READ LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (36) write_stmt -> . WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (37) return_stmt -> . RETURN expr SEMICOLON
+    (34) assign_expr -> . IDENTIFIER STRINGEQUALS expr
+
+    ELSE            reduce using rule 65 (empty -> .)
+    ENDIF           reduce using rule 65 (empty -> .)
+    IF              shift and go to state 65
+    WHILE           shift and go to state 57
+    READ            shift and go to state 54
+    WRITE           shift and go to state 67
+    RETURN          shift and go to state 53
+    IDENTIFIER      shift and go to state 61
+
+    stmt_list                      shift and go to state 122
+    if_stmt                        shift and go to state 68
+    assign_expr                    shift and go to state 60
+    read_stmt                      shift and go to state 55
+    stmt                           shift and go to state 64
+    assign_stmt                    shift and go to state 59
+    base_stmt                      shift and go to state 56
+    while_stmt                     shift and go to state 69
+    return_stmt                    shift and go to state 58
+    write_stmt                     shift and go to state 63
+    empty                          shift and go to state 62
+
+state 116
+
+    (36) write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .
+
+    IF              reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    WHILE           reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    READ            reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    WRITE           reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    RETURN          reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    IDENTIFIER      reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    ELSE            reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    ENDIF           reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    END             reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+    ENDWHILE        reduce using rule 36 (write_stmt -> WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON .)
+
+
+state 117
+
+    (51) primary -> LEFTPAREN expr RIGHTPAREN .
+
+    MULTIPLY        reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    DIVIDE          reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    PLUS            reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    MINUS           reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    SEMICOLON       reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    BOOLEANOPS      reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    RIGHTPAREN      reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+    COMMA           reduce using rule 51 (primary -> LEFTPAREN expr RIGHTPAREN .)
+
+
+state 118
+
+    (46) call_expr -> IDENTIFIER LEFTPAREN expr_list . RIGHTPAREN
+
+    RIGHTPAREN      shift and go to state 123
+
+
+state 119
+
+    (47) expr_list -> expr . expr_list_tail
+    (49) expr_list_tail -> . COMMA expr expr_list_tail
+    (50) expr_list_tail -> . empty
+    (65) empty -> .
+
+    COMMA           shift and go to state 124
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+
+    empty                          shift and go to state 125
+    expr_list_tail                 shift and go to state 126
+
+state 120
+
+    (48) expr_list -> empty .
+    (40) expr_prefix -> empty .
+
+    RIGHTPAREN      reduce using rule 48 (expr_list -> empty .)
+    LEFTPAREN       reduce using rule 40 (expr_prefix -> empty .)
+    IDENTIFIER      reduce using rule 40 (expr_prefix -> empty .)
+    INTLITERAL      reduce using rule 40 (expr_prefix -> empty .)
+    FLOATLITERAL    reduce using rule 40 (expr_prefix -> empty .)
+
+
+state 121
+
+    (64) while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list . ENDWHILE
+
+    ENDWHILE        shift and go to state 127
+
+
+state 122
+
+    (59) if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list . else_part ENDIF
+    (60) else_part -> . ELSE decl stmt_list
+    (61) else_part -> . empty
+    (65) empty -> .
+
+    ELSE            shift and go to state 128
+    ENDIF           reduce using rule 65 (empty -> .)
+
+    else_part                      shift and go to state 129
+    empty                          shift and go to state 130
+
+state 123
+
+    (46) call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .
+
+    MULTIPLY        reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    DIVIDE          reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    PLUS            reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    MINUS           reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    SEMICOLON       reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    BOOLEANOPS      reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    RIGHTPAREN      reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+    COMMA           reduce using rule 46 (call_expr -> IDENTIFIER LEFTPAREN expr_list RIGHTPAREN .)
+
+
+state 124
+
+    (49) expr_list_tail -> COMMA . expr expr_list_tail
+    (38) expr -> . expr_prefix factor
+    (39) expr_prefix -> . expr_prefix factor addop
+    (40) expr_prefix -> . empty
+    (65) empty -> .
+
+    LEFTPAREN       reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    INTLITERAL      reduce using rule 65 (empty -> .)
+    FLOATLITERAL    reduce using rule 65 (empty -> .)
+
+    expr_prefix                    shift and go to state 71
+    expr                           shift and go to state 131
+    empty                          shift and go to state 73
+
+state 125
+
+    (50) expr_list_tail -> empty .
+
+    RIGHTPAREN      reduce using rule 50 (expr_list_tail -> empty .)
+
+
+state 126
+
+    (47) expr_list -> expr expr_list_tail .
+
+    RIGHTPAREN      reduce using rule 47 (expr_list -> expr expr_list_tail .)
+
+
+state 127
+
+    (64) while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .
+
+    IF              reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    WHILE           reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    READ            reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    WRITE           reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    RETURN          reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    IDENTIFIER      reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    END             reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    ENDWHILE        reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    ELSE            reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+    ENDIF           reduce using rule 64 (while_stmt -> WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE .)
+
+
+state 128
+
+    (60) else_part -> ELSE . decl stmt_list
+    (3) decl -> . string_decl decl
+    (4) decl -> . var_decl decl
+    (5) decl -> . empty
+    (6) string_decl -> . STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON
+    (7) var_decl -> . var_type id_list SEMICOLON
+    (65) empty -> .
+    (8) var_type -> . INT
+    (9) var_type -> . FLOAT
+
+    STRING          shift and go to state 6
+    IF              reduce using rule 65 (empty -> .)
+    WHILE           reduce using rule 65 (empty -> .)
+    READ            reduce using rule 65 (empty -> .)
+    WRITE           reduce using rule 65 (empty -> .)
+    RETURN          reduce using rule 65 (empty -> .)
+    IDENTIFIER      reduce using rule 65 (empty -> .)
+    ENDIF           reduce using rule 65 (empty -> .)
+    INT             shift and go to state 7
+    FLOAT           shift and go to state 9
+
+    decl                           shift and go to state 132
+    var_type                       shift and go to state 8
+    var_decl                       shift and go to state 10
+    string_decl                    shift and go to state 11
+    empty                          shift and go to state 12
+
+state 129
+
+    (59) if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part . ENDIF
+
+    ENDIF           shift and go to state 133
+
+
+state 130
+
+    (61) else_part -> empty .
+
+    ENDIF           reduce using rule 61 (else_part -> empty .)
+
+
+state 131
+
+    (49) expr_list_tail -> COMMA expr . expr_list_tail
+    (49) expr_list_tail -> . COMMA expr expr_list_tail
+    (50) expr_list_tail -> . empty
+    (65) empty -> .
+
+    COMMA           shift and go to state 124
+    RIGHTPAREN      reduce using rule 65 (empty -> .)
+
+    empty                          shift and go to state 125
+    expr_list_tail                 shift and go to state 134
+
+state 132
+
+    (60) else_part -> ELSE decl . stmt_list
+    (24) stmt_list -> . stmt stmt_list
+    (25) stmt_list -> . empty
+    (26) stmt -> . base_stmt
+    (27) stmt -> . if_stmt
+    (28) stmt -> . while_stmt
+    (65) empty -> .
+    (29) base_stmt -> . assign_stmt
+    (30) base_stmt -> . read_stmt
+    (31) base_stmt -> . write_stmt
+    (32) base_stmt -> . return_stmt
+    (59) if_stmt -> . IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF
+    (64) while_stmt -> . WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE
+    (33) assign_stmt -> . assign_expr SEMICOLON
+    (35) read_stmt -> . READ LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (36) write_stmt -> . WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON
+    (37) return_stmt -> . RETURN expr SEMICOLON
+    (34) assign_expr -> . IDENTIFIER STRINGEQUALS expr
+
+    ENDIF           reduce using rule 65 (empty -> .)
+    IF              shift and go to state 65
+    WHILE           shift and go to state 57
+    READ            shift and go to state 54
+    WRITE           shift and go to state 67
+    RETURN          shift and go to state 53
+    IDENTIFIER      shift and go to state 61
+
+    stmt_list                      shift and go to state 135
+    if_stmt                        shift and go to state 68
+    assign_expr                    shift and go to state 60
+    read_stmt                      shift and go to state 55
+    stmt                           shift and go to state 64
+    assign_stmt                    shift and go to state 59
+    base_stmt                      shift and go to state 56
+    while_stmt                     shift and go to state 69
+    return_stmt                    shift and go to state 58
+    write_stmt                     shift and go to state 63
+    empty                          shift and go to state 62
+
+state 133
+
+    (59) if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .
+
+    IF              reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    WHILE           reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    READ            reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    WRITE           reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    RETURN          reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    IDENTIFIER      reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    END             reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    ENDWHILE        reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    ELSE            reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+    ENDIF           reduce using rule 59 (if_stmt -> IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF .)
+
+
+state 134
+
+    (49) expr_list_tail -> COMMA expr expr_list_tail .
+
+    RIGHTPAREN      reduce using rule 49 (expr_list_tail -> COMMA expr expr_list_tail .)
+
+
+state 135
+
+    (60) else_part -> ELSE decl stmt_list .
+
+    ENDIF           reduce using rule 60 (else_part -> ELSE decl stmt_list .)
+
