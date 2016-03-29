@@ -107,8 +107,89 @@ def t_error(t):
 
 littleLexer = lex.lex()
 
-#Create lexer
-# lexer = lex.lex()
+class SymbolTable:
+	def __init__(self, name, parent):
+		self.name = name
+		self.variables = []
+		self.children = []
+		self.parent = parent
+
+	def getValues(self):
+		return self.variables
+
+	def clear(self):
+		self.variables = []
+
+	def addChild(self, child):
+		self.children.append(child)
+	
+	def addVariable(self, variable):
+		if not self.contains(variable):
+			self.variables.append(variable)
+
+	def contains(self, variable):
+		for var in self.variables:
+			if var.name == variable.name:
+				return True
+
+		return False
+
+	def containsName(self, name):
+		for var in self.variables:
+			if var.name == name:
+				return True
+		return False
+
+
+	def insertVar(self, variable, varIndex):
+		self.variables.insert(varIndex, variable)
+
+	def getLength(self):
+		return len(self.variables)
+
+	def printSymbolTable(self):
+		print "Symbol table " + self.name
+		for var in self.variables:
+			if (var.hasValue()):
+				print "  name " + var.name + " type " + var.v_type+ " value " + var.value
+			else:
+				print "  name " + var.name + " type " + var.v_type
+
+		for child in self.children:
+			print ""
+			print("CHildren: ")
+			child.printSymbolTable()
+
+	def getParent(self):
+		return self.parent
+
+	def getValueForVar(self, name):
+		for v in self.varaibles:
+			if v.name == name:
+				return v
+		return self.parent.getValueForVar(name)
+
+class Variable:
+	def __init__(self, name, v_type):
+		self.name = name
+		self.v_type = v_type
+		self.has_value = False
+
+	def hasValue(self):
+		return self.has_value
+
+	def setValue(self, value):
+		self.value = value
+		self.has_value = True
+		
+
+globalSymbolTable = SymbolTable("GLOBAL", None)
+currentScope = globalSymbolTable
+currentScope.parent = currentScope
+lastType = None
+index = -1
+currentBlock = 1
+parameterList = SymbolTable("Params", None)
 
 # Parsing rules
 
@@ -134,6 +215,9 @@ def p_decl(p):
 
 def p_string_decl(p):
     "string_decl : STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON "
+    var = Variable(p[2], "STRING")
+    var.setValue(p[4])
+    currentScope.addVariable(var)
     names[p[2]] = p[4]
 
 def p_var_decl(p):
@@ -142,17 +226,43 @@ def p_var_decl(p):
 def p_var_type(p):
     '''var_type : INT
                 | FLOAT'''
+    global lastType
+    lastType = p[1]
 
 def p_any_type(p):
     '''any_type : var_type
                 | VOID'''
+    global lastType
+    lastType = p[1]
 
 def p_id_list(p):
     "id_list : IDENTIFIER id_tail"
+    global index
+    if len(p) > 1:
+        if not currentScope.containsName(p[1]):
+            print("p_id_list: ")
+            print(p[1])
+	    var = Variable(p[1], lastType)
+	    if index == -1:
+	        currentScope.addVariable(var)
+	    else:
+	        currentScope.insertVar(var, index)
+	        index = -1
 
 def p_id_tail(p):
     '''id_tail : COMMA IDENTIFIER id_tail
                | empty'''
+    global index
+    if len(p) > 2:
+        if not currentScope.containsName(p[2]):
+	    if index == -1:
+	        index = currentScope.getLength()
+
+            print("p_id_tail")
+            print(p[2])
+    	    var = Variable(p[2], lastType)
+            currentScope.insertVar(var, index)
+
 
 # Function Parameter List
 def p_param_decl_list(p):
@@ -161,6 +271,12 @@ def p_param_decl_list(p):
 
 def p_param_decl(p):
     '''param_decl : var_type IDENTIFIER'''
+    print("p_param_decl")
+    print(p[2])
+
+    var = Variable(p[2], lastType)
+    parameterList.addVariable(var)
+
 
 def p_param_decl_tail(p):
     '''param_decl_tail : COMMA param_decl param_decl_tail
@@ -173,6 +289,18 @@ def p_func_decl(p):
 
 def p_func_declaration(p):                 
     '''func_declaration : FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END '''
+    global currentScope	
+    currentScope = currentScope.getParent()
+    funcScope = SymbolTable(p[3], currentScope)
+    currentScope.addChild(funcScope)
+    currentScope = funcScope
+    params = parameterList.getValues()
+	
+    if len(params) > 0:
+        for p in params:
+            currentScope.addVariable(p)
+        parameterList.clear()
+    
 
 def p_func_body(p):
     '''func_body : decl stmt_list'''
@@ -256,10 +384,25 @@ def p_mulop(p):
 # Complex Statements and Conditions
 def p_if_stmt(p):
     "if_stmt : IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF"
+    global currentScope, currentBlock
+
+    blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
+    currentScope.addChild(blockScope)
+    currentBlock += 1
+    currentScope = blockScope
+    # currentBlock
 
 def p_else_part(p):
     '''else_part : ELSE decl stmt_list
                  | empty'''
+    global currentScope, currentBlock
+
+    if len(p) > 2:
+        blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
+        currentScope.addChild(blockScope)
+        currentBlock += 1
+        currentScope = blockScope
+
 
 def p_cond(p):
     "cond : expr compop expr"
@@ -270,42 +413,20 @@ def p_compop(p):
 # While Statements
 def p_while_stmt(p):
     "while_stmt : WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE"
+    global currentScope, currentBlock
+ 
+    blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
+    currentScope.addChild(blockScope)
+    currentBlock += 1
+    currentScope = blockScope
+
 
 def p_empty(p):
     'empty : '
 
-# funcs leftover from calc.py
-#
-#def p_expression_binop(p):
-#    '''expression : expression '+' expression
-#                  | expression '-' expression
-#                  | expression '*' expression
-#                  | expression '/' expression'''
-#    if p[2] == '+'  : p[0] = p[1] + p[3]
-#    elif p[2] == '-': p[0] = p[1] - p[3]
-#    elif p[2] == '*': p[0] = p[1] * p[3]
-#    elif p[2] == '/': p[0] = p[1] / p[3]
-
-#def p_expression_group(p):
-#    "expression : '(' expression ')'"
-#	
-#    p[0] = p[2]
-
-#def p_expression_name(p):
-#    "expression : IDENTIFIER"
-#    try:
-#        p[0] = names[p[1]]
-#    except LookupError:
-#        print("Undefined name '%s'" % p[1])
-#        p[0] = 0
-
 def p_error(p):
     global error
     error = True
-#    if p:
-#        print("Syntax error at '%s'" % p.value)
-#    else:
-#         print("Syntax error at EOF")
 
 sys.path.insert(0,"ply-3.8/")
 import ply.yacc as yacc
@@ -316,12 +437,7 @@ with open(sys.argv[1], "r") as myFile:
     data = myFile.read()
     yacc.parse(input=data, lexer=littleLexer)
 
-#f = open('Micro', 'w')
-
 if error:
-    #f.write("Not accepted")
     print("Not accepted")
 else:
-    #f.write("Accepted")
-    print("Accepted")
-
+    globalSymbolTable.printSymbolTable()

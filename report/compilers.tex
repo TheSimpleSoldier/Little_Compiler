@@ -86,7 +86,11 @@
 
 
     	\subsection{Parser}
-    		TODO
+    		For the parser we used the ply library.  With this library, yacc (Yet another Compiler Compiler) was used to do the manual labor of parsing through the tokens, once the grammar was provided.   In this stage of the project the formal definition of the Little Language was converted into a python grammar that the yacc parser could read in.  Using the Lexer created above, the parser was feed a string of tokens which it then evaluated as it built a parse tree.  
+    		
+    		
+    		The Little language is a very simple language with a few strict rules which significantly reduce complexity.  Each program has a program definition with a body that is composed of two sections.  The first section defines variables and the second is for functions.  The functions themselves have a very limited subset of options with conditional systems and only a while loop.  Therefore an unambiguous grammar for this language proved to be a trivial task.  
+    		
 
     	\subsection{Symbol Table}
     		TODO
