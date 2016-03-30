@@ -5,10 +5,11 @@ import sys
 import lex
 
 error = False
+duplicate = ""
 
 #All the reserved words
 reserved = [
-   'PROGRAM',
+    'PROGRAM',
     'BEGIN',
     'END',
     'FUNCTION',
@@ -108,80 +109,103 @@ def t_error(t):
 littleLexer = lex.lex()
 
 class SymbolTable:
-	def __init__(self, name, parent):
-		self.name = name
-		self.variables = []
-		self.children = []
-		self.parent = parent
+    def __init__(self, name, parent):
+        self.name = name
+        self.variables = []
+        self.children = []
+        self.parent = parent
 
-	def getValues(self):
-		return self.variables
+    def getValues(self):
+        return self.variables
 
-	def clear(self):
-		self.variables = []
+    def clear(self):
+        self.variables = []
 
-	def addChild(self, child):
-		self.children.append(child)
-	
-	def addVariable(self, variable):
-		if not self.contains(variable):
-			self.variables.append(variable)
+    def addChild(self, child):
+        self.children.append(child)
 
-	def contains(self, variable):
-		for var in self.variables:
-			if var.name == variable.name:
-				return True
+    def insertChild(self, child, after):
+        if after == "":
+            self.children.insert(0, child)
+            return
 
-		return False
+        count = 0
+        for c in self.children:
+            count += 1
+            if c.name == after:
+                self.children.insert(count, child)
+                return
+        self.children.append(child)
 
-	def containsName(self, name):
-		for var in self.variables:
-			if var.name == name:
-				return True
-		return False
+    def addVariable(self, variable):
+        global error, duplicate
+        if not self.contains(variable):
+            self.variables.append(variable)
+        elif not error:
+            error = True
+            duplicate = variable.name
+
+    def contains(self, variable):
+        for var in self.variables:
+            if var.name == variable.name:
+                return True
+
+        return False
+
+    def containsName(self, name):
+        for var in self.variables:
+            if var.name == name:
+                return True
+        return False
 
 
-	def insertVar(self, variable, varIndex):
-		self.variables.insert(varIndex, variable)
+    def insertVar(self, variable, varIndex):
+        global error, duplicate
+        if not self.contains(variable):
+            self.variables.insert(varIndex, variable)
+        elif not error:
+            error = True
+            duplicate = variable.name
 
-	def getLength(self):
-		return len(self.variables)
+    def getLength(self):
+        return len(self.variables)
 
-	def printSymbolTable(self):
-		print "Symbol table " + self.name
-		for var in self.variables:
-			if (var.hasValue()):
-				print "  name " + var.name + " type " + var.v_type+ " value " + var.value
-			else:
-				print "  name " + var.name + " type " + var.v_type
+    def printSymbolTable(self):
+        print "Symbol table " + self.name
+        for var in self.variables:
+            if (var.hasValue()):
+                print "name " + var.name + " type " + var.v_type+ " value " + var.value
+            else:
+                print "name " + var.name + " type " + var.v_type
 
-		for child in self.children:
-			print ""
-			print("CHildren: ")
-			child.printSymbolTable()
+        for child in self.children:
+            print ""
+            child.printSymbolTable()
 
-	def getParent(self):
-		return self.parent
 
-	def getValueForVar(self, name):
-		for v in self.varaibles:
-			if v.name == name:
-				return v
-		return self.parent.getValueForVar(name)
+    def getParent(self):
+       return self.parent
+
+
+    def getValueForVar(self, name):
+        for v in self.varaibles:
+            if v.name == name:
+                return v
+        return self.parent.getValueForVar(name)
 
 class Variable:
-	def __init__(self, name, v_type):
-		self.name = name
-		self.v_type = v_type
-		self.has_value = False
+    def __init__(self, name, v_type):
+        self.name = name
+        self.v_type = v_type
+        self.has_value = False
 
-	def hasValue(self):
-		return self.has_value
+    def hasValue(self):
+        return self.has_value
 
-	def setValue(self, value):
-		self.value = value
-		self.has_value = True
-		
+    def setValue(self, value):
+        self.value = value
+        self.has_value = True
+
 
 globalSymbolTable = SymbolTable("GLOBAL", None)
 currentScope = globalSymbolTable
@@ -190,19 +214,23 @@ lastType = None
 index = -1
 currentBlock = 1
 parameterList = SymbolTable("Params", None)
+funcList = SymbolTable("Funcs", None)
+blockList = SymbolTable("Block", None)
+lastFunc = ""
+lastBlock = ""
 
 # Parsing rules
 
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','MULTIPLY','DIVIDE'),
-    )
+)
 
 # dictionary of names
 names = { }
 
 def p_statement_start(p):
-	'statement : PROGRAM IDENTIFIER BEGIN pgm_body END'
+    'statement : PROGRAM IDENTIFIER BEGIN pgm_body END'
 
 def p_pgm_body(p):
     '''pgm_body : decl func_decl'''
@@ -239,15 +267,12 @@ def p_id_list(p):
     "id_list : IDENTIFIER id_tail"
     global index
     if len(p) > 1:
-        if not currentScope.containsName(p[1]):
-            print("p_id_list: ")
-            print(p[1])
-	    var = Variable(p[1], lastType)
-	    if index == -1:
-	        currentScope.addVariable(var)
-	    else:
-	        currentScope.insertVar(var, index)
-	        index = -1
+        var = Variable(p[1], lastType)
+        if index == -1:
+            currentScope.addVariable(var)
+        else:
+            currentScope.insertVar(var, index)
+            index = -1
 
 def p_id_tail(p):
     '''id_tail : COMMA IDENTIFIER id_tail
@@ -255,13 +280,19 @@ def p_id_tail(p):
     global index
     if len(p) > 2:
         if not currentScope.containsName(p[2]):
-	    if index == -1:
-	        index = currentScope.getLength()
+            if index == -1:
+                index = currentScope.getLength()
 
-            print("p_id_tail")
-            print(p[2])
-    	    var = Variable(p[2], lastType)
+            var = Variable(p[2], lastType)
             currentScope.insertVar(var, index)
+
+# These are for id_lists that aren't in var declaration
+def p_id_list2(p):
+    "id_list2 : IDENTIFIER id_tail2"
+
+def p_id_tail2(p):
+    '''id_tail2 : COMMA IDENTIFIER id_tail2
+                 | empty'''
 
 
 # Function Parameter List
@@ -271,8 +302,6 @@ def p_param_decl_list(p):
 
 def p_param_decl(p):
     '''param_decl : var_type IDENTIFIER'''
-    print("p_param_decl")
-    print(p[2])
 
     var = Variable(p[2], lastType)
     parameterList.addVariable(var)
@@ -287,25 +316,72 @@ def p_func_decl(p):
     '''func_decl : func_declaration func_decl
                  | empty'''
 
-def p_func_declaration(p):                 
+def p_func_declaration(p):
     '''func_declaration : FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END '''
-    global currentScope	
+    global currentScope, lastFunc
     currentScope = currentScope.getParent()
     funcScope = SymbolTable(p[3], currentScope)
-    currentScope.addChild(funcScope)
-    currentScope = funcScope
+    currentScope.insertChild(funcScope, lastFunc)
+    if not lastBlock == "":
+        lastFunc = lastBlock
+    else:
+        lastFunc = p[3]
+
+    # currentScope = funcScope
     params = parameterList.getValues()
-	
+
     if len(params) > 0:
         for p in params:
-            currentScope.addVariable(p)
+            funcScope.addVariable(p)
         parameterList.clear()
-    
+
+    if len(funcList.getValues()) > 0:
+        for v in funcList.getValues():
+            funcScope.addVariable(v)
+        funcList.clear()
+
 
 def p_func_body(p):
-    '''func_body : decl stmt_list'''
+    '''func_body : decl_func_var stmt_list'''
 
-# Statement List
+def p_decl_func_var(p):
+    '''decl_func_var : string_decl_func decl_func_var
+                     | var_decl_func decl_func_var
+                     | empty'''
+
+def p_string_decl_func(p):
+    "string_decl_func : STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON "
+    var = Variable(p[2], "STRING")
+    var.setValue(p[4])
+    funcList.addVariable(var)
+    names[p[2]] = p[4]
+
+def p_var_decl_func(p):
+    "var_decl_func : var_type id_list_func SEMICOLON"
+
+def p_id_list_func(p):
+    "id_list_func : IDENTIFIER id_tail_func"
+    global index
+    if len(p) > 1:
+        var = Variable(p[1], lastType)
+        if index == -1:
+            funcList.addVariable(var)
+        else:
+            funcList.insertVar(var, index)
+            index = -1
+
+def p_id_tail_func(p):
+    '''id_tail_func : COMMA IDENTIFIER id_tail_func
+               | empty'''
+    global index
+    if len(p) > 2:
+        if index == -1:
+            index = funcList.getLength()
+
+        var = Variable(p[2], lastType)
+        funcList.insertVar(var, index)
+
+        # Statement List
 def p_stmt_list(p):
     '''stmt_list : stmt stmt_list
                  | empty '''
@@ -329,10 +405,10 @@ def p_assign_expr(p):
     '''assign_expr : IDENTIFIER STRINGEQUALS expr'''
 
 def p_read_stmt(p):
-    '''read_stmt : READ LEFTPAREN id_list RIGHTPAREN SEMICOLON'''
+    '''read_stmt : READ LEFTPAREN id_list2 RIGHTPAREN SEMICOLON'''
 
 def p_write_stmt(p):
-    "write_stmt : WRITE LEFTPAREN id_list RIGHTPAREN SEMICOLON"
+    "write_stmt : WRITE LEFTPAREN id_list2 RIGHTPAREN SEMICOLON"
 
 def p_return_stmt(p):
     "return_stmt : RETURN expr SEMICOLON"
@@ -383,25 +459,39 @@ def p_mulop(p):
 
 # Complex Statements and Conditions
 def p_if_stmt(p):
-    "if_stmt : IF LEFTPAREN cond RIGHTPAREN decl stmt_list else_part ENDIF"
-    global currentScope, currentBlock
+    "if_stmt : IF LEFTPAREN cond RIGHTPAREN decl_block_var stmt_list else_part ENDIF"
+    global currentScope, currentBlock, lastBlock
 
+    currentScope = currentScope.getParent()
     blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
+    lastBlock = "Block " + str(currentBlock)
     currentScope.addChild(blockScope)
     currentBlock += 1
-    currentScope = blockScope
+    # currentScope = blockScope
     # currentBlock
 
+    if len(blockList.getValues()) > 0:
+        for var in blockList.getValues():
+            blockScope.addVariable(var)
+        blockList.clear()
+
 def p_else_part(p):
-    '''else_part : ELSE decl stmt_list
+    '''else_part : ELSE decl_block_var stmt_list
                  | empty'''
-    global currentScope, currentBlock
+    global currentScope, currentBlock, lastBlock
 
     if len(p) > 2:
+        currentScope = currentScope.getParent()
         blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
+        lastBlock = "Block " + str(currentBlock)
         currentScope.addChild(blockScope)
         currentBlock += 1
-        currentScope = blockScope
+        # currentScope = blockScope
+
+        if len(blockList.getValues()) > 0:
+            for var in blockList.getValues():
+                blockScope.addVariable(var)
+            blockList.clear()
 
 
 def p_cond(p):
@@ -412,14 +502,60 @@ def p_compop(p):
 
 # While Statements
 def p_while_stmt(p):
-    "while_stmt : WHILE LEFTPAREN cond RIGHTPAREN decl stmt_list ENDWHILE"
+    "while_stmt : WHILE LEFTPAREN cond RIGHTPAREN decl_block_var stmt_list ENDWHILE"
     global currentScope, currentBlock
- 
+
+    currentScope = currentScope.getParent()
     blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
     currentScope.addChild(blockScope)
     currentBlock += 1
-    currentScope = blockScope
+    #currentScope = blockScope
 
+    if len(blockList.getValues()) > 0:
+        for var in blockList.getValues():
+            blockScope.addVariable(var)
+        blockList.clear()
+
+#################### these are for block statements #########################
+
+def p_decl_block_var(p):
+    '''decl_block_var : string_decl_block decl_block_var
+                     | var_decl_block decl_block_var
+                     | empty'''
+
+def p_string_decl_block(p):
+    "string_decl_block : STRING IDENTIFIER STRINGEQUALS STRINGLITERAL SEMICOLON "
+    var = Variable(p[2], "STRING")
+    var.setValue(p[4])
+    blockList.addVariable(var)
+    names[p[2]] = p[4]
+
+def p_var_decl_block(p):
+    "var_decl_block : var_type id_list_block SEMICOLON"
+
+def p_id_list_block(p):
+    "id_list_block : IDENTIFIER id_tail_block"
+    global index
+    if len(p) > 1:
+        var = Variable(p[1], lastType)
+        if index == -1:
+            blockList.addVariable(var)
+        else:
+            blockList.insertVar(var, index)
+            index = -1
+
+def p_id_tail_block(p):
+    '''id_tail_block : COMMA IDENTIFIER id_tail_block
+               | empty'''
+    global index
+    if len(p) > 2:
+        if index == -1:
+            index = blockList.getLength()
+
+        var = Variable(p[2], lastType)
+        blockList.insertVar(var, index)
+
+#############################################################################
 
 def p_empty(p):
     'empty : '
@@ -438,6 +574,6 @@ with open(sys.argv[1], "r") as myFile:
     yacc.parse(input=data, lexer=littleLexer)
 
 if error:
-    print("Not accepted")
+    print("DECLARATION ERROR " + duplicate)
 else:
     globalSymbolTable.printSymbolTable()
