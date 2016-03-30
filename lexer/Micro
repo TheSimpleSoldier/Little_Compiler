@@ -463,8 +463,8 @@ def p_if_stmt(p):
     global currentScope, currentBlock, lastBlock
 
     currentScope = currentScope.getParent()
-    blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
-    lastBlock = "Block " + str(currentBlock)
+    blockScope = SymbolTable("BLOCK " + str(currentBlock), currentScope)
+    lastBlock = "BLOCK " + str(currentBlock)
     currentScope.addChild(blockScope)
     currentBlock += 1
     # currentScope = blockScope
@@ -482,8 +482,8 @@ def p_else_part(p):
 
     if len(p) > 2:
         currentScope = currentScope.getParent()
-        blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
-        lastBlock = "Block " + str(currentBlock)
+        blockScope = SymbolTable("BLOCK " + str(currentBlock), currentScope)
+        lastBlock = "BLOCK " + str(currentBlock)
         currentScope.addChild(blockScope)
         currentBlock += 1
         # currentScope = blockScope
@@ -506,7 +506,8 @@ def p_while_stmt(p):
     global currentScope, currentBlock
 
     currentScope = currentScope.getParent()
-    blockScope = SymbolTable("Block " + str(currentBlock), currentScope)
+    blockScope = SymbolTable("BLOCK " + str(currentBlock), currentScope)
+    lastBlock = "BLOCK " + str(currentBlock)
     currentScope.addChild(blockScope)
     currentBlock += 1
     #currentScope = blockScope
