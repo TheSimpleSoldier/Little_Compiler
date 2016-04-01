@@ -1,7 +1,7 @@
 #!/bin/bash
 
-INPUTS=Step2/inputs/*
-mkdir Step2/usertest
+INPUTS=Step3/inputs/*
+mkdir Step3/usertest
 for i in $INPUTS
 	do
 		filename=${i%.*}
@@ -9,6 +9,6 @@ for i in $INPUTS
 		echo "Testing input file $i"
 		output="${name}Test.out"
 		outtest="${name}.out"
-		./Micro $i > Step2/usertest/$output
-		diff -b -s Step2/usertest/$output Step2/outputs/$outtest
+		./Micro $i > Step3/usertest/$output
+		diff -b -s Step3/usertest/$output Step3/outputs/$outtest
 	done

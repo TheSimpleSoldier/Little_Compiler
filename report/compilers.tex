@@ -93,7 +93,9 @@
     		
 
     	\subsection{Symbol Table}
-    		TODO
+    		Now that the compiler parses through the tokens the next step is to create a symbol table.  For this aspect of the project we created a couple of data structures.  First we had a variable object which would hold information about a specific variable including its name and value.  Additionally, we created a symbol table object.  This object had a parent, a list of children and a list of variables.  Furthermore, we also stored the current scope level.  Thus we could navigate up the scope list to find a declaration of a variable or we could add another scope as a child if we had a function or Block statement.  
+    		
+    		The main difficulty from constructing the symbol table was from ply.  When parsing the leaves were executed in reverse order.  This meant that the parser would find a variable declaration before it knew what symbol table the declaration was suppose to be a part of.   To counteract this, temporary symbol tables were created and when the declaration of a function or Block statement was hit these were then appended to the correct symbol table.  The same was true of individual variables and in order to meet the requirement that variables appear in the proper order in the symbol table, variables needed logic about whether to be inserted at the beginning or end of the variable list in order to maintain their proper orientation relative to one another.
 
     	\subsection{Semantic Routines}
     		TODO
