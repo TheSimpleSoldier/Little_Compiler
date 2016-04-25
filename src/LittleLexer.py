@@ -5,6 +5,8 @@ import sys
 import lex
 from IRRep import *
 import itertools
+sys.path.insert(0,"ply-3.8/")
+import ply.yacc as yacc
 
 error = False
 duplicate = ""
@@ -184,6 +186,11 @@ class SymbolTable:
             print ""
             child.printSymbolTable()
 
+    def getType(self, name):
+        for var in self.variables:
+            if(var.name == name):
+                return var.v_type
+        return None
 
     def getParent(self):
        return self.parent
@@ -210,6 +217,7 @@ class Variable:
 
 
 globalSymbolTable = SymbolTable("GLOBAL", None)
+globalTempSymbolTable = SymbolTable("GLOBAL", None)
 currentScope = globalSymbolTable
 currentScope.parent = currentScope
 lastType = None
@@ -433,7 +441,10 @@ def p_read_stmt(p):
     '''read_stmt : READ LEFTPAREN id_list2 RIGHTPAREN SEMICOLON'''
     tempRep = IRRep()
     for var in p[3]:
-        node = IRNode("READI", var, "", "", None, None)
+        tstring = "I"
+        if(globalSymbolTable.getType(var) == "FLOAT"):
+            tstring = "F"
+        node = IRNode("READ" + tstring, var, "", "", None, None)
         tempRep.addToEnd(node)
     p[0] = [tempRep]
 
@@ -441,7 +452,12 @@ def p_write_stmt(p):
     "write_stmt : WRITE LEFTPAREN id_list2 RIGHTPAREN SEMICOLON"
     tempRep = IRRep()
     for var in p[3]:
-        node = IRNode("WRITEI", var, "", "", None, None)
+        tstring = "I"
+        if(globalSymbolTable.getType(var) == "FLOAT"):
+            tstring = "F"
+        if(globalSymbolTable.getType(var) == "STRING"):
+            tstring = "S"
+        node = IRNode("WRITE" + tstring, var, "", "", None, None)
         tempRep.addToEnd(node)
     p[0] = [tempRep]
 
@@ -454,12 +470,28 @@ def p_expr(p):
     if(p[1] is None):
         p[0] = p[2]
     elif(p[1][2] == "+"):
-        node = IRNode("ADDI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        tstring = "I"
+        if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+           globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+            tstring = "F"
+        node = IRNode("ADD" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        if(tstring == "I"):
+            globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+        else:
+            globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
         p[2][0].addToEnd(node)
         p[1][0].addToEnd(p[2][0].first)
         p[0] = [p[1][0], node.result]
     else:
-        node = IRNode("SUBI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        tstring = "I"
+        if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+           globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+            tstring = "F"
+        node = IRNode("SUB" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        if(tstring == "I"):
+            globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+        else:
+            globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
         p[2][0].addToEnd(node)
         p[1][0].addToEnd(p[2][0].first)
         p[0] = [p[1][0], node.result]
@@ -471,12 +503,28 @@ def p_expr_prefix(p):
         p[0] = [p[2][0], p[2][1], p[3]]
     elif(len(p) == 4):
         if(p[1][2] == "+"):
-            node = IRNode("ADDI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            tstring = "I"
+            if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+               globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+                tstring = "F"
+            node = IRNode("ADD" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            if(tstring == "I"):
+                globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+            else:
+                globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
             p[2][0].addToEnd(node)
             p[1][0].addToEnd(p[2][0].first)
             p[0] = [p[1][0], node.result, p[3]]
         else:
-            node = IRNode("SUBI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            tstring = "I"
+            if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+               globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+                tstring = "F"
+            node = IRNode("SUB" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            if(tstring == "I"):
+                globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+            else:
+                globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
             p[2][0].addToEnd(node)
             p[1][0].addToEnd(p[2][0].first)
             p[0] = [p[1][0], node.result, p[3]]
@@ -486,12 +534,28 @@ def p_factor(p):
     if(p[1] is None):
         p[0] = p[2]
     elif(p[1][1] == "*"):
-        node = IRNode("MULTI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        tstring = "I"
+        if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+           globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+            tstring = "F"
+        node = IRNode("MULT" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        if(tstring == "I"):
+            globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+        else:
+            globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
         p[2][0].addToEnd(node)
         p[1][0].addToEnd(p[2][0].first)
         p[0] = [p[1][0], node.result]
     else:
-        node = IRNode("DIVI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        tstring = "I"
+        if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+           globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+            tstring = "F"
+        node = IRNode("DIV" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        if(tstring == "I"):
+            globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+        else:
+            globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
         p[2][0].addToEnd(node)
         p[1][0].addToEnd(p[2][0].first)
         p[0] = [p[1][0], node.result]
@@ -503,12 +567,28 @@ def p_factor_prefix(p):
         p[0] = [p[2][0], p[2][1], p[3]]
     elif(len(p) == 4):
         if(p[1][1] == "*"):
-            node = IRNode("MULTI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            tstring = "I"
+            if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+               globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+                tstring = "F"
+            node = IRNode("MULT" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            if(tstring == "I"):
+                globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+            else:
+                globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
             p[2][0].addToEnd(node)
             p[1][0].addToEnd(p[2][0].first)
             p[0] = [p[1][0], node.result, p[3]]
         else:
-            node = IRNode("DIVI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            tstring = "I"
+            if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+               globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
+                tstring = "F"
+            node = IRNode("DIV" + tstring, p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            if(tstring == "I"):
+                globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
+            else:
+                globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
             p[2][0].addToEnd(node)
             p[1][0].addToEnd(p[2][0].first)
             p[0] = [p[1][0], node.result, p[3]]
@@ -538,11 +618,13 @@ def p_primary(p):
         p[0] = p[2]
     elif(p[1].isdigit()):
         node = IRNode("STOREI", p[1], "", irlist.nextTemp(), None, None)
+        globalTempSymbolTable.addVariable(Variable(node.result, "INT"))
         tempRep = IRRep()
         tempRep.addToEnd(node)
         p[0] = [tempRep, node.result]
     elif(p[1][0].isdigit()):
         node = IRNode("STOREF", p[1], "", irlist.nextTemp(), None, None)
+        globalTempSymbolTable.addVariable(Variable(node.result, "FLOAT"))
         tempRep = IRRep()
         tempRep.addToEnd(node)
         p[0] = [tempRep, node.result]
@@ -725,8 +807,6 @@ def p_error(p):
     global error
     error = True
 
-sys.path.insert(0,"ply-3.8/")
-import ply.yacc as yacc
 yacc.yacc()
 
 irlist = IRRep()
