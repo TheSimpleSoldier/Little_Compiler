@@ -355,6 +355,7 @@ def p_func_declaration(p):
 
 def p_func_body(p):
     '''func_body : decl_func_var stmt_list'''
+    irlist.addToEnd(p[2][0].first)
 
 def p_decl_func_var(p):
     '''decl_func_var : string_decl_func decl_func_var
@@ -397,38 +398,52 @@ def p_id_tail_func(p):
 def p_stmt_list(p):
     '''stmt_list : stmt stmt_list
                  | empty '''
+    if(p[1] is not None):
+        if(p[2] is not None):
+            p[1][0].addToEnd(p[2][0].first)
+            p[0] = [p[1][0]]
+        else:
+            p[0] = [p[1][0]]
 
 def p_stmt(p):
     '''stmt : base_stmt
             | if_stmt
             | while_stmt'''
+    p[0] = [p[1][0]]
 
 def p_base_stmt(p):
     '''base_stmt : assign_stmt
                  | read_stmt
                  | write_stmt
                  | return_stmt'''
+    p[0] = [p[1][0]]
 
 # Basic Statements            
 def p_assign_stmt(p):
     '''assign_stmt : assign_expr SEMICOLON'''
+    p[0] = [p[1][0]]
 
 def p_assign_expr(p):
     '''assign_expr : IDENTIFIER STRINGEQUALS expr'''
-    node = IRNode("STOREI", p[3], "", p[1], None, None)
-    irlist.addToEnd(node)
+    node = IRNode("STOREI", p[3][1], "", p[1], None, None)
+    p[3][0].addToEnd(node)
+    p[0] = [p[3][0]]
 
 def p_read_stmt(p):
     '''read_stmt : READ LEFTPAREN id_list2 RIGHTPAREN SEMICOLON'''
+    tempRep = IRRep()
     for var in p[3]:
         node = IRNode("READI", var, "", "", None, None)
-        irlist.addToEnd(node)
+        tempRep.addToEnd(node)
+    p[0] = [tempRep]
 
 def p_write_stmt(p):
     "write_stmt : WRITE LEFTPAREN id_list2 RIGHTPAREN SEMICOLON"
+    tempRep = IRRep()
     for var in p[3]:
         node = IRNode("WRITEI", var, "", "", None, None)
-        irlist.addToEnd(node)
+        tempRep.addToEnd(node)
+    p[0] = [tempRep]
 
 def p_return_stmt(p):
     "return_stmt : RETURN expr SEMICOLON"
@@ -438,57 +453,65 @@ def p_expr(p):
     "expr : expr_prefix factor"
     if(p[1] is None):
         p[0] = p[2]
-    elif(p[1][1] == "+"):
-        node = IRNode("ADDI", p[1][0], p[2], irlist.nextTemp(), None, None)
-        irlist.addToEnd(node)
-        p[0] = node.result
+    elif(p[1][2] == "+"):
+        node = IRNode("ADDI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        p[2][0].addToEnd(node)
+        p[1][0].addToEnd(p[2][0].first)
+        p[0] = [p[1][0], node.result]
     else:
-        node = IRNode("SUBI", p[1][0], p[2], irlist.nextTemp(), None, None)
-        irlist.addToEnd(node)
-        p[0] = node.result
+        node = IRNode("SUBI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        p[2][0].addToEnd(node)
+        p[1][0].addToEnd(p[2][0].first)
+        p[0] = [p[1][0], node.result]
 
 def p_expr_prefix(p):
     '''expr_prefix : expr_prefix factor addop
                    | empty'''
     if(p[1] is None and len(p) == 4):
-        p[0] = [p[2], p[3]]
+        p[0] = [p[2][0], p[2][1], p[3]]
     elif(len(p) == 4):
-        if(p[1][1] == "+"):
-            node = IRNode("ADDI", p[1][0], p[2], irlist.nextTemp(), None, None)
-            irlist.addToEnd(node)
-            p[0] = [node.result, p[3]]
+        if(p[1][2] == "+"):
+            node = IRNode("ADDI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            p[2][0].addToEnd(node)
+            p[1][0].addToEnd(p[2][0].first)
+            p[0] = [p[1][0], node.result, p[3]]
         else:
-            node = IRNode("SUBI", p[1][0], p[2], irlist.nextTemp(), None, None)
-            irlist.addToEnd(node)
-            p[0] = [node.result, p[3]]
+            node = IRNode("SUBI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            p[2][0].addToEnd(node)
+            p[1][0].addToEnd(p[2][0].first)
+            p[0] = [p[1][0], node.result, p[3]]
 
 def p_factor(p):
     '''factor : factor_prefix postfix_expr'''
     if(p[1] is None):
         p[0] = p[2]
     elif(p[1][1] == "*"):
-        node = IRNode("MULTI", p[1][0], p[2], irlist.nextTemp(), None, None)
-        irlist.addToEnd(node)
-        p[0] = node.result
+        node = IRNode("MULTI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        p[2][0].addToEnd(node)
+        p[1][0].addToEnd(p[2][0].first)
+        p[0] = [p[1][0], node.result]
     else:
-        node = IRNode("DIVI", p[1][0], p[2], irlist.nextTemp(), None, None)
-        irlist.addToEnd(node)
-        p[0] = node.result
+        node = IRNode("DIVI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+        p[2][0].addToEnd(node)
+        p[1][0].addToEnd(p[2][0].first)
+        p[0] = [p[1][0], node.result]
 
 def p_factor_prefix(p):
     '''factor_prefix : factor_prefix postfix_expr mulop
                      | empty'''
     if(p[1] is None and len(p) == 4):
-        p[0] = [p[2], p[3]]
+        p[0] = [p[2][0], p[2][1], p[3]]
     elif(len(p) == 4):
         if(p[1][1] == "*"):
-            node = IRNode("MULTI", p[1][0], p[2], irlist.nextTemp(), None, None)
-            irlist.addToEnd(node)
-            p[0] = [node.result, p[3]]
+            node = IRNode("MULTI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            p[2][0].addToEnd(node)
+            p[1][0].addToEnd(p[2][0].first)
+            p[0] = [p[1][0], node.result, p[3]]
         else:
-            node = IRNode("DIVI", p[1][0], p[2], irlist.nextTemp(), None, None)
-            irlist.addToEnd(node)
-            p[0] = [node.result, p[3]]
+            node = IRNode("DIVI", p[1][1], p[2][1], irlist.nextTemp(), None, None)
+            p[2][0].addToEnd(node)
+            p[1][0].addToEnd(p[2][0].first)
+            p[0] = [p[1][0], node.result, p[3]]
 
 def p_postfix_expr(p):
     '''postfix_expr : primary
@@ -515,14 +538,16 @@ def p_primary(p):
         p[0] = p[2]
     elif(p[1].isdigit()):
         node = IRNode("STOREI", p[1], "", irlist.nextTemp(), None, None)
-        irlist.addToEnd(node)
-        p[0] = node.result
+        tempRep = IRRep()
+        tempRep.addToEnd(node)
+        p[0] = [tempRep, node.result]
     elif(p[1][0].isdigit()):
         node = IRNode("STOREF", p[1], "", irlist.nextTemp(), None, None)
-        irlist.addToEnd(node)
-        p[0] = node.result
+        tempRep = IRRep()
+        tempRep.addToEnd(node)
+        p[0] = [tempRep, node.result]
     else:
-        p[0] = p[1]
+        p[0] = [IRRep(), p[1]]
 
 def p_addop(p):
     '''addop : PLUS
@@ -551,6 +576,24 @@ def p_if_stmt(p):
         for var in blockList.getValues():
             blockScope.addVariable(var)
         blockList.clear()
+    
+    tempRep = IRRep()
+    tempRep.addToEnd(p[3][0].first)
+    tempRep.addToEnd(p[6][0].first)
+    if(p[7] is not None):
+        skipLabel = irlist.nextLabel()
+        tempNode1 = IRNode("JUMP", skipLabel, "", "", None, None)
+        tempNode2 = IRNode("LABEL", p[3][1], "", "", None, None)
+        tempRep.addToEnd(tempNode1)
+        tempRep.addToEnd(tempNode2)
+        tempRep.addToEnd(p[7][0].first)
+        tempNode3 = IRNode("LABEL", skipLabel, "", "", None, None)
+        tempRep.addToEnd(tempNode3)
+    else:
+        tempNode = IRNode("LABEL", p[3][1], "", "", None, None)
+        tempRep.addToEnd(tempNode)
+    
+    p[0] = [tempRep]
 
 def p_else_part(p):
     '''else_part : ELSE decl_block_var stmt_list
@@ -569,13 +612,40 @@ def p_else_part(p):
             for var in blockList.getValues():
                 blockScope.addVariable(var)
             blockList.clear()
+    if(p[1] is not None):
+        p[0] = [p[3][0]]
+    else:
+        p[0] = None
 
 
 def p_cond(p):
     "cond : expr compop expr"
+    p[1][0].addToEnd(p[3][0].first)
+    tempLabel = irlist.nextLabel()
+    if(p[2] == ">"):
+        tempNode = IRNode("LEI", p[1][1], p[3][1], tempLabel, None, None)
+        p[1][0].addToEnd(tempNode)
+    elif(p[2] == "<"):
+        tempNode = IRNode("GEI", p[1][1], p[3][1], tempLabel, None, None)
+        p[1][0].addToEnd(tempNode)
+    elif(p[2] == ">="):
+        tempNode = IRNode("LTI", p[1][1], p[3][1], tempLabel, None, None)
+        p[1][0].addToEnd(tempNode)
+    elif(p[2] == "<="):
+        tempNode = IRNode("GTI", p[1][1], p[3][1], tempLabel, None, None)
+        p[1][0].addToEnd(tempNode)
+    elif(p[2] == "!="):
+        tempNode = IRNode("EQI", p[1][1], p[3][1], tempLabel, None, None)
+        p[1][0].addToEnd(tempNode)
+    elif(p[2] == "="):
+        tempNode = IRNode("NEI", p[1][1], p[3][1], tempLabel, None, None)
+        p[1][0].addToEnd(tempNode)
+    #add check
+    p[0] = [p[1][0], tempLabel]
 
 def p_compop(p):
     '''compop : BOOLEANOPS'''
+    p[0] = p[1]
 
 # While Statements
 def p_while_stmt(p):
@@ -593,6 +663,18 @@ def p_while_stmt(p):
         for var in blockList.getValues():
             blockScope.addVariable(var)
         blockList.clear()
+
+    tempRep = IRRep()
+    tempLabel = irlist.nextLabel()
+    tempNode1 = IRNode("LABEL", tempLabel, "", "", None, None)
+    tempRep.addToEnd(tempNode1)
+    tempRep.addToEnd(p[3][0].first)
+    tempRep.addToEnd(p[6][0].first)
+    tempNode2 = IRNode("JUMP", tempLabel, "", "", None, None)
+    tempRep.addToEnd(tempNode2)
+    tempNode3 = IRNode("LABEL", p[3][1], "", "", None, None)
+    tempRep.addToEnd(tempNode3)
+    p[0] = [tempRep]
 
 #################### these are for block statements #########################
 

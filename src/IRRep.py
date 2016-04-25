@@ -1,6 +1,7 @@
 class IRRep:
     def __init__(self):
         self.lastTemp = 1
+        self.lastLabel = 1
         self.first = None
         self.last = None
 
@@ -8,14 +9,15 @@ class IRRep:
         return self.last
 
     def addToEnd(self, nextNode):
-        if(self.last is None):
-            self.first = nextNode
-            self.last = nextNode
-        else:
-            self.last.nextNode = nextNode
+        if(nextNode is not None):
+            if(self.last is None):
+                self.first = nextNode
+                self.last = nextNode
+            else:
+                self.last.nextNode = nextNode
 
-        while(self.last.nextNode is not None):
-            self.last = self.last.nextNode
+            while(self.last.nextNode is not None):
+                self.last = self.last.nextNode
 
     def printIR(self):
         temp = self.first
@@ -29,6 +31,10 @@ class IRRep:
     def nextTemp(self):
         self.lastTemp += 1
         return "$T" + str(self.lastTemp - 1)
+
+    def nextLabel(self):
+        self.lastLabel += 1
+        return "label" + str(self.lastLabel - 1)
 
 class IRNode:
     def __init__(self, opcode, first, second, result, nextNode, branchNode):

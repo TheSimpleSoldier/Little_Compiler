@@ -8,3 +8,4 @@ compilers.pdf
 compilers.toc
 tiny
 *.pyc
+*.sw[po]
