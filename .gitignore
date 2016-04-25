@@ -6,3 +6,5 @@ compilers.dvi
 compilers.log
 compilers.pdf
 compilers.toc
+tiny
+*.pyc

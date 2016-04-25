@@ -3,6 +3,8 @@
 
 import sys
 import lex
+from IRRep import *
+import itertools
 
 error = False
 duplicate = ""
@@ -289,10 +291,20 @@ def p_id_tail(p):
 # These are for id_lists that aren't in var declaration
 def p_id_list2(p):
     "id_list2 : IDENTIFIER id_tail2"
+    if(p[2] is not None):
+        p[0] = list(itertools.chain.from_iterable([[p[1]], p[2]]))
+    else:
+        p[0] = [p[1]]
 
 def p_id_tail2(p):
     '''id_tail2 : COMMA IDENTIFIER id_tail2
                  | empty'''
+    if(p[1] is not None and p[3] is not None):
+        p[0] = list(itertools.chain.from_iterable([[p[2]], p[3]]))
+    elif(len(p) == 4):
+        p[0] = [p[2]]
+    else:
+        p[0] = None
 
 
 # Function Parameter List
@@ -403,12 +415,20 @@ def p_assign_stmt(p):
 
 def p_assign_expr(p):
     '''assign_expr : IDENTIFIER STRINGEQUALS expr'''
+    node = IRNode("STOREI", p[3], "", p[1], None, None)
+    irlist.addToEnd(node)
 
 def p_read_stmt(p):
     '''read_stmt : READ LEFTPAREN id_list2 RIGHTPAREN SEMICOLON'''
+    for var in p[3]:
+        node = IRNode("READI", var, "", "", None, None)
+        irlist.addToEnd(node)
 
 def p_write_stmt(p):
     "write_stmt : WRITE LEFTPAREN id_list2 RIGHTPAREN SEMICOLON"
+    for var in p[3]:
+        node = IRNode("WRITEI", var, "", "", None, None)
+        irlist.addToEnd(node)
 
 def p_return_stmt(p):
     "return_stmt : RETURN expr SEMICOLON"
@@ -416,21 +436,64 @@ def p_return_stmt(p):
 # Expressions
 def p_expr(p):
     "expr : expr_prefix factor"
+    if(p[1] is None):
+        p[0] = p[2]
+    elif(p[1][1] == "+"):
+        node = IRNode("ADDI", p[1][0], p[2], irlist.nextTemp(), None, None)
+        irlist.addToEnd(node)
+        p[0] = node.result
+    else:
+        node = IRNode("SUBI", p[1][0], p[2], irlist.nextTemp(), None, None)
+        irlist.addToEnd(node)
+        p[0] = node.result
 
 def p_expr_prefix(p):
     '''expr_prefix : expr_prefix factor addop
                    | empty'''
+    if(p[1] is None and len(p) == 4):
+        p[0] = [p[2], p[3]]
+    elif(len(p) == 4):
+        if(p[1][1] == "+"):
+            node = IRNode("ADDI", p[1][0], p[2], irlist.nextTemp(), None, None)
+            irlist.addToEnd(node)
+            p[0] = [node.result, p[3]]
+        else:
+            node = IRNode("SUBI", p[1][0], p[2], irlist.nextTemp(), None, None)
+            irlist.addToEnd(node)
+            p[0] = [node.result, p[3]]
 
 def p_factor(p):
     '''factor : factor_prefix postfix_expr'''
+    if(p[1] is None):
+        p[0] = p[2]
+    elif(p[1][1] == "*"):
+        node = IRNode("MULTI", p[1][0], p[2], irlist.nextTemp(), None, None)
+        irlist.addToEnd(node)
+        p[0] = node.result
+    else:
+        node = IRNode("DIVI", p[1][0], p[2], irlist.nextTemp(), None, None)
+        irlist.addToEnd(node)
+        p[0] = node.result
 
 def p_factor_prefix(p):
     '''factor_prefix : factor_prefix postfix_expr mulop
                      | empty'''
+    if(p[1] is None and len(p) == 4):
+        p[0] = [p[2], p[3]]
+    elif(len(p) == 4):
+        if(p[1][1] == "*"):
+            node = IRNode("MULTI", p[1][0], p[2], irlist.nextTemp(), None, None)
+            irlist.addToEnd(node)
+            p[0] = [node.result, p[3]]
+        else:
+            node = IRNode("DIVI", p[1][0], p[2], irlist.nextTemp(), None, None)
+            irlist.addToEnd(node)
+            p[0] = [node.result, p[3]]
 
 def p_postfix_expr(p):
     '''postfix_expr : primary
                     | call_expr'''
+    p[0] = p[1]
 
 def p_call_expr(p):
     "call_expr : IDENTIFIER LEFTPAREN expr_list RIGHTPAREN "
@@ -448,14 +511,28 @@ def p_primary(p):
                | IDENTIFIER
                | INTLITERAL
                | FLOATLITERAL'''
+    if(p[1] == "("):
+        p[0] = p[2]
+    elif(p[1].isdigit()):
+        node = IRNode("STOREI", p[1], "", irlist.nextTemp(), None, None)
+        irlist.addToEnd(node)
+        p[0] = node.result
+    elif(p[1][0].isdigit()):
+        node = IRNode("STOREF", p[1], "", irlist.nextTemp(), None, None)
+        irlist.addToEnd(node)
+        p[0] = node.result
+    else:
+        p[0] = p[1]
 
 def p_addop(p):
     '''addop : PLUS
              | MINUS '''
+    p[0] = p[1]
 
 def p_mulop(p):
     '''mulop : MULTIPLY
              | DIVIDE '''
+    p[0] = p[1]
 
 # Complex Statements and Conditions
 def p_if_stmt(p):
@@ -560,6 +637,7 @@ def p_id_tail_block(p):
 
 def p_empty(p):
     'empty : '
+    p[0] = None
 
 def p_error(p):
     global error
@@ -569,12 +647,22 @@ sys.path.insert(0,"ply-3.8/")
 import ply.yacc as yacc
 yacc.yacc()
 
+irlist = IRRep()
+nodeOne = IRNode("LABEL", "main", "", "", None, None)
+irlist.addToEnd(nodeOne)
+nodeTwo = IRNode("LINK", "", "", "", None, None)
+irlist.addToEnd(nodeTwo)
+
 # Reads in the file and processes it
 with open(sys.argv[1], "r") as myFile:
     data = myFile.read()
     yacc.parse(input=data, lexer=littleLexer)
 
-if error:
-    print("DECLARATION ERROR " + duplicate)
-else:
-    globalSymbolTable.printSymbolTable()
+nodeLast = IRNode("RET", "", "", "", None, None)
+irlist.addToEnd(nodeLast)
+irlist.printIR()
+
+#if error:
+#    print("DECLARATION ERROR " + duplicate)
+#else:
+#    globalSymbolTable.printSymbolTable()
