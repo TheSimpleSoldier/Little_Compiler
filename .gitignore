@@ -9,3 +9,4 @@ compilers.toc
 tiny
 *.pyc
 *.sw[po]
+parser.out

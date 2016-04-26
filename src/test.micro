@@ -1,6 +1,0 @@
-PROGRAM test
-BEGIN
-    FLOAT a;
-    INT b, c;
-    STRING d := "Hello World";
-END

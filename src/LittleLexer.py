@@ -3,10 +3,9 @@
 
 import sys
 import lex
+import yacc
 from IRRep import *
 import itertools
-sys.path.insert(0,"ply-3.8/")
-import ply.yacc as yacc
 
 error = False
 duplicate = ""
