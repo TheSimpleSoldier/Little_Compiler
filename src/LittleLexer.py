@@ -440,7 +440,11 @@ def p_assign_stmt(p):
 
 def p_assign_expr(p):
     '''assign_expr : IDENTIFIER STRINGEQUALS expr'''
-    node = IRNode("STOREI", p[3][1], "", p[1], None, None)
+    tstring = "I"
+    if(globalSymbolTable.getType(p[3][1]) == "FLOAT" or globalTempSymbolTable.getType(p[3][1]) == "FLOAT" or
+       globalSymbolTable.getType(p[1]) == "FLOAT" or globalTempSymbolTable.getType(p[1]) == "FLOAT"):
+        tstring = "F"
+    node = IRNode("STORE" + tstring, p[3][1], "", p[1], None, None)
     p[3][0].addToEnd(node)
     p[0] = [p[3][0]]
 
@@ -709,25 +713,29 @@ def p_else_part(p):
 
 def p_cond(p):
     "cond : expr compop expr"
+    tstring = "I"
+    if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
+       globalSymbolTable.getType(p[3][1]) == "FLOAT" or globalTempSymbolTable.getType(p[3][1]) == "FLOAT"):
+        tstring = "F"
     p[1][0].addToEnd(p[3][0].first)
     tempLabel = irlist.nextLabel()
     if(p[2] == ">"):
-        tempNode = IRNode("LEI", p[1][1], p[3][1], tempLabel, None, None)
+        tempNode = IRNode("LE" + tstring, p[1][1], p[3][1], tempLabel, None, None)
         p[1][0].addToEnd(tempNode)
     elif(p[2] == "<"):
-        tempNode = IRNode("GEI", p[1][1], p[3][1], tempLabel, None, None)
+        tempNode = IRNode("GE" + tstring, p[1][1], p[3][1], tempLabel, None, None)
         p[1][0].addToEnd(tempNode)
     elif(p[2] == ">="):
-        tempNode = IRNode("LTI", p[1][1], p[3][1], tempLabel, None, None)
+        tempNode = IRNode("LT" + tstring, p[1][1], p[3][1], tempLabel, None, None)
         p[1][0].addToEnd(tempNode)
     elif(p[2] == "<="):
-        tempNode = IRNode("GTI", p[1][1], p[3][1], tempLabel, None, None)
+        tempNode = IRNode("GT" + tstring, p[1][1], p[3][1], tempLabel, None, None)
         p[1][0].addToEnd(tempNode)
     elif(p[2] == "!="):
-        tempNode = IRNode("EQI", p[1][1], p[3][1], tempLabel, None, None)
+        tempNode = IRNode("EQ" + tstring, p[1][1], p[3][1], tempLabel, None, None)
         p[1][0].addToEnd(tempNode)
     elif(p[2] == "="):
-        tempNode = IRNode("NEI", p[1][1], p[3][1], tempLabel, None, None)
+        tempNode = IRNode("NE" + tstring, p[1][1], p[3][1], tempLabel, None, None)
         p[1][0].addToEnd(tempNode)
     #add check
     p[0] = [p[1][0], tempLabel]

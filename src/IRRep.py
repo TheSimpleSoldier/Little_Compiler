@@ -152,7 +152,7 @@ class IRRep:
             elif(temp.opcode == "LEI" or temp.opcode == "LEF"):
                 tstring = "i"
                 if(temp.opcode == "LEF"):
-                    tstring = "f"
+                    tstring = "r"
                 compare = "r" + str(count)
                 count += 1
                 print("move " + second + " " + compare)
