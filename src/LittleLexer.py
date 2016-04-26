@@ -186,6 +186,13 @@ class SymbolTable:
             print ""
             child.printSymbolTable()
 
+    def printTableTiny(self):
+        for var in self.variables:
+            if(var.v_type == "STRING"):
+                print "str " + var.name + " " + var.value
+            else:
+                print "var " + var.name
+
     def getType(self, name):
         for var in self.variables:
             if(var.name == name):
@@ -533,7 +540,7 @@ def p_factor(p):
     '''factor : factor_prefix postfix_expr'''
     if(p[1] is None):
         p[0] = p[2]
-    elif(p[1][1] == "*"):
+    elif(p[1][2] == "*"):
         tstring = "I"
         if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
            globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
@@ -566,7 +573,7 @@ def p_factor_prefix(p):
     if(p[1] is None and len(p) == 4):
         p[0] = [p[2][0], p[2][1], p[3]]
     elif(len(p) == 4):
-        if(p[1][1] == "*"):
+        if(p[1][2] == "*"):
             tstring = "I"
             if(globalSymbolTable.getType(p[1][1]) == "FLOAT" or globalTempSymbolTable.getType(p[1][1]) == "FLOAT" or
                globalSymbolTable.getType(p[2][1]) == "FLOAT" or globalTempSymbolTable.getType(p[2][1]) == "FLOAT"):
@@ -822,7 +829,7 @@ with open(sys.argv[1], "r") as myFile:
 
 nodeLast = IRNode("RET", "", "", "", None, None)
 irlist.addToEnd(nodeLast)
-irlist.printIR()
+irlist.printTiny(globalSymbolTable)
 
 #if error:
 #    print("DECLARATION ERROR " + duplicate)
