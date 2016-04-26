@@ -6,7 +6,9 @@ compilers.dvi
 compilers.log
 compilers.pdf
 compilers.toc
+compilers.synctex.gz
 tiny
 *.pyc
 *.sw[po]
 parser.out
+.DS_Store
