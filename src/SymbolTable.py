@@ -61,23 +61,23 @@ class SymbolTable:
         return len(self.variables)
 
     def printSymbolTable(self):
-        print "Symbol table " + self.name
+        print("Symbol table " + self.name)
         for var in self.variables:
             if (var.hasValue()):
-                print "name " + var.name + " type " + var.v_type+ " value " + var.value
+                print("name " + var.name + " type " + var.v_type+ " value " + var.value)
             else:
-                print "name " + var.name + " type " + var.v_type
+                print("name " + var.name + " type " + var.v_type)
 
         for child in self.children:
-            print ""
+            print("")
             child.printSymbolTable()
 
     def printTableTiny(self):
         for var in self.variables:
             if(var.v_type == "STRING"):
-                print "str " + var.name + " " + var.value
+                print("str " + var.name + " " + var.value)
             else:
-                print "var " + var.name
+                print("var " + var.name)
 
     def getType(self, name):
         for var in self.variables:
