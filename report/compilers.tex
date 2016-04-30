@@ -10,7 +10,7 @@
     \maketitle
     \begin{abstract}
 	
-		The goal of this project was to learn the fundamentals of compilation through the implementation of working compiler for the little language.  This project was done through Montana State University as the senior capstone project.  	
+		The goal of this project was to learn the fundamentals of compilation through the implementation of working compiler for the little language.  This project was done through Montana State University as the senior capstone project of the professional option for Computer Science.  	
 	
     \end{abstract}
     \clearpage
@@ -18,7 +18,7 @@
     \clearpage
     
     \section{Introduction}
-		This project was done as part of the CSCI 468 compilers class.  // TODO: add more to this section as the project progresses 
+		Compilers are a critical and foundation piece of computer science.  They are the tools that allowed for the abstraction of higher level languages, allowing far greater speed of development as well as rapid implementation of tedious optimizations.  As compilers are such critical tools in software development, learning both the theory and practical implementations behind them is an important aspect of any computer science education.
 		    
     \section{Background}
     		// TODO: complete this section
@@ -88,8 +88,113 @@
     	\subsection{Parser}
     		For the parser we used the ply library.  With this library, yacc (Yet another Compiler Compiler) was used to do the manual labor of parsing through the tokens, once the grammar was provided.   In this stage of the project the formal definition of the Little Language was converted into a python grammar that the yacc parser could read in.  Using the Lexer created above, the parser was feed a string of tokens which it then evaluated as it built a parse tree.  
     		
+    		We used the following structure to define a program: 
+    		\begin{verbatim}
+                    'statement : PROGRAM IDENTIFIER BEGIN pgm_body END'
+           \end{verbatim}
+           
+           A program in the little language is composed of the keyword "PROGRAM" a name and then a code block in between the key words 'BEGIN' and 'END'
+           
+           The program body was defined as follows:
+           \begin{verbatim}
+                   '''pgm_body : decl func_decl'''
+           \end{verbatim}
+           
+           Basically the program is divided into two sections.  The first is a list of global variables and the second section is all of the functions.
+           
+           the function list was defined as follows in such a way as to allow any number of functions including zero.
+           
+           \begin{verbatim}
+           		'''func_decl : func_declaration func_decl
+               	             | empty'''
+            \end{verbatim}
+            
+            Similar to most c languages function declarations were composed of a return type, an indentifier, a list of parameters and a function body.
+            
+            \begin{verbatim}
+                   '''func_declaration : FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END '''
+           \end{verbatim}
+           
+           The paramater list is defined as a list of variable types and names separated by commas.
+           
+            \begin{verbatim}
+                   '''param_decl_list : param_decl param_decl_tail
+                                              | empty'''
+           \end{verbatim}
+           
+			A param_decl is where parameters name and type is specified.
+			\begin{verbatim}
+                   '''param_decl : var_type IDENTIFIER'''
+           \end{verbatim}
+			            
+           The param_decl_tail was used to ensure that the variables were seperated by Commas and that the list could be extended.
+           
+           \begin{verbatim}
+                   '''param_decl_tail : COMMA param_decl param_decl_tail
+					                           | empty'''
+           \end{verbatim}
+           
+           The func_body is very similar to the program body as it is composed of two pieces, variable declarations and statements.
+           \begin{verbatim}
+                   '''func_body : decl_func_var stmt_list'''
+           \end{verbatim}
+           
+           Inside of stmt_list is where most of the heavy lifting of the program takes place.  Statements include all of the operations, conditional statments and loops.
+           
+            \begin{verbatim}
+                  '''stmt_list : stmt stmt_list
+				                    | empty '''
+				   '''stmt : base_stmt
+             				   | if_stmt
+		               	   | while_stmt'''
+           \end{verbatim}
+           
+           Base Statements are used for all of the standard one line operations such as assigning values, or expressions, to variables, returning values, reading, and writing.
+           \begin{verbatim}
+                   '''base_stmt : assign_stmt
+					                    | read_stmt
+					                    | write_stmt
+					                    | return_stmt'''
+           \end{verbatim}
+           
+           Assignment statements are used for handling operations and various types of expressions.
+           
+           \begin{verbatim}
+           		'''assign_stmt : assign_expr SEMICOLON'''
+           		'''assign_expr : IDENTIFIER STRINGEQUALS expr'''
+            \end{verbatim}		
+           
+			Expression statements allow for any combination of variable operators.  
+			
+			\begin{verbatim}
+				"expr : expr_prefix factor"      
+				'''expr_prefix : expr_prefix factor addop
+                                   | empty'''
+			\end{verbatim}	   
+			
+			Factors represent various kinds of values.  They can be variables, constants or function calls.
+			
+			\begin{verbatim}
+				'''factor : factor_prefix postfix_expr'''
+				'''factor_prefix : factor_prefix postfix_expr mulop
+				                       | empty'''
+				'''postfix_expr : primary
+			                          | call_expr'''  
+			    "call_expr : IDENTIFIER LEFTPAREN expr_list RIGHTPAREN "                                          
+			\end{verbatim}	
+			
+			Statements can also be conditional statements.
+			\begin{verbatim}
+				"if_stmt : IF LEFTPAREN cond RIGHTPAREN decl_block_var stmt_list else_part ENDIF"
+           \end{verbatim}	
+           
+           Additionally, statements can become loops.
+           \begin{verbatim}
+				"while_stmt : WHILE LEFTPAREN cond RIGHTPAREN decl_block_var stmt_list ENDWHILE"
+           \end{verbatim}
+           
     		
-    		The Little language is a very simple language with a few strict rules which significantly reduce complexity.  Each program has a program definition with a body that is composed of two sections.  The first section defines variables and the second is for functions.  The functions themselves have a very limited subset of options with conditional systems and only a while loop.  Therefore an unambiguous grammar for this language proved to be a trivial task.  
+    		The Little language is a very simple language with a few strict rules which significantly reduce complexity.  Each program has a program definition with a body that is composed of two sections.  The first section defines variables and the second is for functions.  The functions themselves have a very limited subset of options with conditional systems and only a while loop.  Therefore an unambiguous grammar for this language proved to be a relatively trivial task.  
     		
 
     	\subsection{Symbol Table}
