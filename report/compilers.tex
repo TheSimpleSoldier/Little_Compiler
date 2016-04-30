@@ -122,24 +122,26 @@
                                               | empty'''
            \end{verbatim}
            
-			A param_decl is where parameters name and type is specified.
+			A param decl is where parameters name and type is specified.
+			
 			\begin{verbatim}
                    '''param_decl : var_type IDENTIFIER'''
            \end{verbatim}
 			            
-           The param_decl_tail was used to ensure that the variables were seperated by Commas and that the list could be extended.
+           The param decl tail was used to ensure that the variables were seperated by Commas and that the list could be extended.
            
            \begin{verbatim}
                    '''param_decl_tail : COMMA param_decl param_decl_tail
 					                           | empty'''
            \end{verbatim}
            
-           The func_body is very similar to the program body as it is composed of two pieces, variable declarations and statements.
+           The func body is very similar to the program body as it is composed of two pieces, variable declarations and statements.
+           
            \begin{verbatim}
                    '''func_body : decl_func_var stmt_list'''
            \end{verbatim}
            
-           Inside of stmt_list is where most of the heavy lifting of the program takes place.  Statements include all of the operations, conditional statments and loops.
+           Inside of stmt list is where most of the heavy lifting of the program takes place.  Statements include all of the operations, conditional statments and loops.
            
             \begin{verbatim}
                   '''stmt_list : stmt stmt_list
