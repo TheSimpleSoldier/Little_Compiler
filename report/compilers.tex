@@ -1,6 +1,11 @@
 \documentclass[12pt]{article}
 \usepackage{parskip}
 \usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
 
 \title{A little Compiler}
 \author{Joshua Leger, Fred Kneeland}
@@ -190,13 +195,13 @@ param_decl_list RIGHTPAREN BEGIN func_body END '''
 			\begin{verbatim}
 "if_stmt : IF LEFTPAREN cond RIGHTPAREN decl_block_var
 stmt_list else_part ENDIF"
-           \end{verbatim}	
+            \end{verbatim}	
            
-           Additionally, statements can become loops.
-           \begin{verbatim}
+            Additionally, statements can become loops.
+            \begin{verbatim}
 "while_stmt : WHILE LEFTPAREN cond RIGHTPAREN decl_block_var
 stmt_list ENDWHILE"
-           \end{verbatim}
+            \end{verbatim}
            
     		
     		The Little language is a very simple language with a few strict rules which significantly reduce complexity.  Each program has a program definition with a body that is composed of two sections.  The first section defines variables and the second is for functions.  The functions themselves have a very limited subset of options with conditional systems and only a while loop.  Therefore an unambiguous grammar for this language proved to be a relatively trivial task.  
@@ -208,10 +213,121 @@ stmt_list ENDWHILE"
     		The main difficulty for constructing the symbol table was from ply.  When parsing the leaves were executed in reverse order.  This meant that the parser would find a variable declaration before it knew what symbol table the declaration was suppose to be a part of.   To counteract this, temporary symbol tables were created and when the declaration of a function or Block statement was hit these were then appended to the correct symbol table.  The same was true of individual variables and in order to meet the requirement that variables appear in the proper order in the symbol table, variables needed logic about whether to be inserted at the beginning or end of the variable list in order to maintain their proper orientation relative to one another.
 
     	\subsection{Semantic Routines}
-    		TODO
+    		The goal of the semantic routines is to generate the assembly code for the program.
+            It creates an intermediate representation and then converts that to the actual assembly required by the tiny simulator.
+            The intermediate representation is a linked list of 3 address codes that is generated during parsing and utilizes the symbol table.
+            The codes are:
+            \begin{verbatim}
+ADDI   OP1 OP2 RESULT
+ADDF   OP1 OP2 RESULT
+SUBI   OP1 OP2 RESULT
+SUBF   OP1 OP2 RESULT
+MULTI  OP1 OP2 RESULT
+MULTF  OP1 OP2 RESULT
+DIVI   OP1 OP2 RESULT
+DIVF   OP1 OP2 RESULT
+STOREI OP1     RESULT
+STOREF OP1     RESULT
+GTI    OP1 OP2 LABEL
+GTF    OP1 OP2 LABEL
+GEI    OP1 OP2 LABEL
+GEF    OP1 OP2 LABEL
+LTI    OP1 OP2 LABEL
+LTF    OP1 OP2 LABEL
+LEI    OP1 OP2 LABEL
+LEF    OP1 OP2 LABEL
+NEI    OP1 OP2 LABEL
+NEF    OP1 OP2 LABEL
+EQI    OP1 OP2 LABEL
+EQF    OP1 OP2 LABEL
+JUMP           LABEL
+LABEL          STRING
+READI          RESULT
+READF          RESULT
+WRITEI         RESULT
+WRITEF         RESULT
+            \end{verbatim}
+
+            The codes were created and chained together throughout parsing, while keeping track of temporary variables and labels that the codes generated.
+            For example, given the following piece of code:
+            \begin{verbatim}
+A := B + C * D
+            \end{verbatim}
+            The parser would first generate
+            \begin{verbatim}
+MULTI C D $T1
+            \end{verbatim}
+            It would store the MULTI command at the head of the linked list and return \$T1 up through the parser.
+            Next the parser would generate
+            \begin{verbatim}
+ADDI B $T1 $T2
+            \end{verbatim}
+            It got passed the \$T1 variable for the second arguement and generates \$T2, passing it up again.
+            Finally, it would generate
+            \begin{verbatim}
+STOREI $T2 A
+            \end{verbatim}
+            The final code for the line is a linked list of 3 lines,
+            \begin{verbatim}
+MULTI C D $T1
+ADDI B $T1 $T2
+STOREI $T2 A
+            \end{verbatim}
+            This list is then passed up higher and combined with other statements to create a linked list that is the full intermediate representation.
+
+            From there, it is a simple matter to convert all the 3 address codes to 2 address codes that the tiny simulator can run.
+            For STORE, the conversion is
+            \begin{verbatim}
+STORE OP1 RESULT
+================
+move OP1 rx
+move rx RESULT
+            \end{verbatim}
+
+            For READ and WRITE, the conversion is
+            \begin{verbatim}
+READ/WRITE RESULT
+=================
+sys read/write RESULT
+            \end{verbatim}
+
+            For ADD, SUB, MULT, and DIV, the conversion is
+            \begin{verbatim}
+ADD/SUB/MULT/DIV OP1 OP2 RESULT
+===============================
+move OP1 rx
+add/sub/mult/div op2 rx
+            \end{verbatim}
+
+            For LABEL, the conversion is
+            \begin{verbatim}
+LABEL STRING
+============
+label STRING
+            \end{verbatim}
+
+            For JUMP, the conversion is
+            \begin{verbatim}
+JUMP LABEL
+==========
+jmp LABEL
+            \end{verbatim}
+
+            For GT, GE, LT, LE, NE, EQ, the conversion is
+            \begin{verbatim}
+GT/GE/LT/LE/NE/EQ OP1 OP2 LABEL
+===============================
+move OP2 rx
+cmp OP1 rx
+jgt/jge/jlt/jle/jne/jeq LABEL
+            \end{verbatim}
 
     	\subsection{Full fledged Compiler}
-    		TODO
+            The main components of the compiler are the lexer and parser.
+            First, the lexer runs through the code and generates symbols from the raw text.
+            \begin{center}
+                \includegraphics[width=\linewidth]{uml}
+            \end{center}
 
     \section{Conclusion and future work}	
 			TODO	    

@@ -6,6 +6,7 @@ compilers.dvi
 compilers.log
 compilers.pdf
 compilers.toc
+compilers.out
 compilers.synctex.gz
 tiny
 *.pyc
