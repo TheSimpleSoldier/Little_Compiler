@@ -276,6 +276,49 @@ STOREI $T2 A
             \end{verbatim}
             This list is then passed up higher and combined with other statements to create a linked list that is the full intermediate representation.
 
+            Another example is the while loop.
+            Take the following:
+            \begin{verbatim}
+i := 10;
+WHILE (i != 0)
+    i := i - 1;
+ENDWHILE
+            \end{verbatim}
+            The parser would first generate
+            \begin{verbatim}
+STOREI 10 $T1
+STOREI $T1 i
+            \end{verbatim}
+            It wold then generate the code for conditional statement inside the parentheses.
+            \begin{verbatim}
+STOREI 0 $T2
+EQI i $T2 label1
+            \end{verbatim}
+            Next, it generates the code to execute inside the loop.
+            \begin{verbatim}
+STOREI 1 $T3
+SUBI i $T3 $T4
+STOREI $T4 i
+            \end{verbatim}
+            Finally, it combines all sections of the code with the neccessary jump and label statements.
+            \begin{verbatim}
+STOREI 10 $T4
+STOREI $T4 i
+
+LABEL label2 
+
+STOREI 0 $T5
+EQI i $T5 label1
+
+STOREI 1 $T6
+SUBI i $T6 $T7
+STOREI $T7 i
+
+JUMP label2 
+LABEL label1
+            \end{verbatim}
+            Most of the parts are created whether it was part of a loop or not and the loop just combines them all.
+
             From there, it is a simple matter to convert all the 3 address codes to 2 address codes that the tiny simulator can run.
             For STORE, the conversion is
             \begin{verbatim}
@@ -326,6 +369,8 @@ jgt/jge/jlt/jle/jne/jeq LABEL
     	\subsection{Full fledged Compiler}
             The main components of the compiler are the lexer and parser.
             First, the lexer runs through the code and generates symbols from the raw text.
+            Next, the parser using the symbols to ensure correct syntax and generate the symbol table and intermediate code.
+            Finally, the intermediate code is converted into tiny code, which is output and can be run.
             \begin{center}
                 \includegraphics[width=\linewidth]{uml}
             \end{center}
