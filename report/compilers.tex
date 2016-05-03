@@ -23,7 +23,7 @@
     \clearpage
     
     \section{Introduction}
-        The goal of this project is to create a fully functioning compiler as the senior capstone project for the CS department at MSU.  The goal is that students will have a solid grasp on the mechanics and theory behind this integral component in most software development.  Over the course of several months a team of two seniors developed a complete compiler for the Little Language with a full functioning scanner, parser, symbol table and semantic routines.  Throughout the rest of the paper we will go over the various components of our compiler and how we developed each step as well as future work to improve the performance of the compiler.
+        In this project students were tasked with creating a fully functioning compiler for the Little language.  The goal is that students will have a solid grasp on the mechanics and theory behind this integral component in most software development.  Over the course of several months a team of two seniors developed a complete compiler for the Little Language with a full functioning scanner, parser, symbol table and semantic routines.  Throughout the rest of the paper we will go over the various components of our compiler and how we developed each step as well as future work to improve the overall performance of the compiler.
             
     \section{Background}
         Compilers are a critical and foundation piece of computer science.  They are the tools that allowed for the abstraction of higher level languages, allowing far greater speed of development as well as rapid implementation of tedious optimizations.  As compilers are such critical tools in software development, learning both the theory and practical implementations behind them is an important aspect of any computer science education.  
@@ -118,7 +118,7 @@
             Similar to most c languages function declarations were composed of a return type, an identifier, a list of parameters and a function body.
             
             \begin{verbatim}
-                   '''func_declaration : FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END '''
+ '''func_declaration : FUNCTION any_type IDENTIFIER LEFTPAREN param_decl_list RIGHTPAREN BEGIN func_body END '''
            \end{verbatim}
            
            The parameter list is defined as a list of variable types and names separated by commas.
@@ -128,7 +128,7 @@
                    | empty'''
            \end{verbatim}
            
-            A param decl is where parameters name and type is specified.
+            A param decl is where a parameters name and type is specified.
             
             \begin{verbatim}
 '''param_decl : var_type IDENTIFIER'''
@@ -209,6 +209,7 @@ stmt_list ENDWHILE"
 
         \subsection{Symbol Table}
             Now that the compiler parses through the tokens the next step is to create a symbol table.  For this aspect of the project we created a couple of data structures.  First we had a variable object which would hold information about a specific variable including its name and value.  Additionally, we created a symbol table object.  This object had a parent, a list of children and a list of variables.  Furthermore, we also stored the current scope level.  Thus we could navigate up the scope list to find a declaration of a variable or we could add another scope as a child if we had a function or Block statement.  
+            
             This was accomplished by adding code to the parsing rules.  Under each rule that dealt with variables in the parser the current symbol table had to be updated.  Because of the way that the symbol tables were created we started with a global symbol table.  We also had a variable that pointed to the current symbol table.  Then whenever there was a variable declaration it was added to the current symbol table.  In the same way when a new scope was encountered it was added as a child of the current symbol table and the current symbol table was then updated to be the newly created table.  Then when the scope was exited the current symbol table variable was updated to be its parent. 
             
             The main difficulty for constructing the symbol table was from ply.  When parsing the leaves were executed first.  This meant that the parser would find a variable declaration before it knew what symbol table the declaration was suppose to be a part of.   To counteract this, temporary symbol tables were created and when the declaration of a function or Block statement was hit these were then appended to the correct symbol table.  The same was true of individual variables and in order to meet the requirement that variables appear in the proper order in the symbol table, variables needed logic about whether to be inserted at the beginning or end of the variable list in order to maintain their proper orientation relative to one another.
@@ -380,6 +381,9 @@ jgt/jge/jlt/jle/jne/jeq LABEL
 
     \section{Conclusion and future work}    
             While a fully functional compiler was working by the end of this project there are several body's of work remaining.  First was that no optimizations were made to the compiler.  If this compiler was going to be used in a real life production setting then this would be a serious issue of concern.  The first optimization that should be developed is CSE (common sub-expression elimination) in order to minimize redundant operations.  Second, register allocation should be done in a more efficient manner.  In order to accomplish this the compiler should create a liveness tree for registers.  Then when a register is no longer being used it should "kill" it and use that register for other values in the rest of the program.  
+            
             In addition to optimizations the next stage of development should include expanding the use of functions in the code.  Currently the semantic routines does not contain support for function declaration or calls other than the main function.  As any significant code base should be broken into multiple functions this is a critical piece of development before this compiler can be considered operational.
+            
+            Through four phases of development all of the essential parts of a compiler were created and integrated together to form a fully functioning compiler.  This project was used in conjunction with CSCI 468 in order to teach students the fundamentals of compilation.  While there is significant work remaining before the compiler would be ready for real world use, it served its educational purpose of demonstrating each aspect of a compiler.
     
  \end{document}
